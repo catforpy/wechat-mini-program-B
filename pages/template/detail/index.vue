@@ -704,12 +704,19 @@ const loadMockData = () => {
 onLoad((options: any) => {
   console.log('=== 模板详情页 onLoad ===')
   console.log('原始 options:', options)
-  console.log('options.id:', options?.id)
-  console.log('options.userRole:', options?.userRole)
 
-  // 修复参数解析：确保正确获取 ID
-  const idParam = options?.id
-  templateId.value = idParam ? parseInt(idParam) : 0
+  // 获取模板基本信息
+  const nameParam = options?.name
+  const descParam = options?.desc
+
+  if (nameParam) {
+    templateData.value.baseInfo.name = decodeURIComponent(nameParam)
+  }
+
+  if (descParam) {
+    templateData.value.baseInfo.desc = decodeURIComponent(descParam)
+    templateData.value.baseInfo.tags = [descParam]
+  }
 
   // 获取用户角色
   const roleParam = options?.userRole
@@ -717,12 +724,112 @@ onLoad((options: any) => {
     userRole.value = roleParam as UserRole
   }
 
-  console.log('解析后的 templateId:', templateId.value)
+  console.log('解析后的模板名称:', templateData.value.baseInfo.name)
   console.log('解析后的 userRole:', userRole.value)
 
-  // 加载数据
-  loadTemplateDetail()
+  // 动态生成模板数据
+  generateDynamicTemplateData()
+
+  console.log('模板数据已生成')
 })
+
+// 根据模板名称动态生成数据
+const generateDynamicTemplateData = () => {
+  const name = templateData.value.baseInfo.name
+  const desc = templateData.value.baseInfo.desc || '小程序模板'
+
+  // 生成价格（基于名称hash）
+  const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  const price = (hash % 50) * 100 + 2800  // 2800-7800之间的价格
+  const rating = ((hash % 50) / 10 + 4.5).toFixed(1)  // 4.5-5.0
+
+  // 更新基本信息
+  templateData.value.baseInfo.price = price
+  templateData.value.baseInfo.rating = parseFloat(rating)
+  templateData.value.baseInfo.tags = [desc.split('、')[0] || desc]
+  templateData.value.baseInfo.agentName = ['小张', '小李', '小王', '小刘'][hash % 4]
+  templateData.value.baseInfo.agentId = hash % 10 + 1
+  templateData.value.baseInfo.updatedAt = `${(hash % 7) + 1}天前`
+
+  // 生成轮播图（使用随机图片）
+  const imageSeeds = [hash, hash + 1, hash + 2]
+  templateData.value.banner = imageSeeds.map(seed => ({
+    type: 'image',
+    url: `https://picsum.photos/750/400?random=${seed}`,
+    title: `${name}截图${seed}`
+  }))
+
+  bannerList.value = templateData.value.banner
+
+  // 生成展示模块
+  templateData.value.modules = [
+    {
+      id: 'features',
+      title: '核心特色',
+      icon: '✨',
+      expanded: true,
+      contents: [
+        {
+          type: 'image',
+          url: `https://picsum.photos/670/400?random=${hash + 10}`,
+          title: '功能展示'
+        },
+        {
+          type: 'feature-list',
+          title: '主要功能',
+          features: generateFeatures(name, desc)
+        }
+      ]
+    },
+    {
+      id: 'overview',
+      title: '功能概览',
+      icon: '📋',
+      expanded: false,
+      contents: [
+        {
+          type: 'text',
+          text: `${name}是一款专业的微信小程序解决方案，功能完善，操作便捷，助您快速搭建业务平台。`
+        }
+      ]
+    },
+    {
+      id: 'scenarios',
+      title: '适用场景',
+      icon: '🎯',
+      expanded: false,
+      contents: [
+        {
+          type: 'feature-list',
+          features: generateScenarios(name)
+        }
+      ]
+    }
+  ]
+}
+
+// 根据模板名称生成功能列表
+const generateFeatures = (name: string, desc: string): string[] => {
+  const featureTemplates = [
+    `${name} - 核心功能模块`,
+    '用户管理系统 - 支持用户注册、信息管理、数据统计',
+    '内容管理系统 - 快速发布和更新内容',
+    '订单管理系统 - 完整的订单流程处理',
+    '数据分析系统 - 实时监控业务数据',
+    '消息通知系统 - 重要消息及时提醒'
+  ]
+  return featureTemplates.slice(0, 4)
+}
+
+// 根据模板名称生成适用场景
+const generateScenarios = (name: string): string[] => {
+  return [
+    `✓ ${name}行业`,
+    `✓ 微信小程序生态`,
+    `✓ 移动端用户`,
+    `✓ 快速上线部署`
+  ]
+}
 
 onMounted(() => {
   // 其他初始化逻辑

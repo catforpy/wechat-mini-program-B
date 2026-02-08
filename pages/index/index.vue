@@ -204,14 +204,11 @@ const handleAppClick = (app: QuickEntryApp) => {
 
 // 点击模板
 const handleTemplateClick = (template: TemplateInfo) => {
-  // 根据模板名称生成一个简单的hash ID
-  const hash = template.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
-  const templateId = (hash % 3) + 1  // 确保ID在1-3之间（对应mock数据中的3个模板）
+  console.log('点击模板:', template)
 
-  console.log('点击模板:', template.name, 'templateId:', templateId)
-
+  // 传递模板基本信息到详情页
   uni.navigateTo({
-    url: `/pages/template/detail/index?id=${templateId}&userRole=merchant`
+    url: `/pages/template/detail/index?name=${encodeURIComponent(template.name)}&desc=${encodeURIComponent(template.desc)}&category=模板&userRole=merchant`
   })
 }
 </script>

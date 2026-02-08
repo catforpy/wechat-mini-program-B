@@ -323,7 +323,7 @@ export const companyCategories: FirstLevelCategory[] = [
       { name: '网络小说', qualification: '（3选1）', scope: '适用于提供网络小说在线阅读相关服务。', templates: [] },
       { name: '出版物', qualification: '（3选1）', scope: '适用于提供出版物（不含小说、动漫、学术期刊）在线阅读相关服务。', templates: [] },
       { name: '学术期刊', qualification: '（2选1）', scope: '适用于提供学术期刊发表、投稿、阅读等服务。', templates: [] },
-      { name: '其他视频', qualification: '（6选1）', scope: '适用于提供视频播放、观看等服务。', templates: [] },
+      { name: '其他视频', qualification: '（6选1）', scope: '适用于提供视频播放、观看等服务。', templates: [{ name: '虚拟数字人直播', desc: 'AI虚拟主播、实时互动' }] },
       { name: '视频广场', qualification: '（二选一）', scope: '适用于提供视频播放、观看等服务。', templates: [{ name: '短视频社区', desc: '视频上传、评论互动' }] },
       { name: '电台', qualification: '（2选1）', scope: '适用于提供电台/网络电台/FM/广播收听平台/音频节目等服务。', templates: [] },
       { name: '微短剧', qualification: '（2选1）', scope: '适用于提供网络微短剧视频播放、观看等服务。', templates: [] },
