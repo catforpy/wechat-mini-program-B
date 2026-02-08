@@ -20,7 +20,9 @@ export function getEnv(): 'development' | 'production' | 'testing' {
  * 是否为开发环境
  */
 export function isDev(): boolean {
-  return getEnv() === 'development'
+  // 强制启用Mock模式用于开发测试
+  return true
+  // return getEnv() === 'development'
 }
 
 /**

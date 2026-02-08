@@ -323,7 +323,7 @@ export const companyCategories: FirstLevelCategory[] = [
       { name: '网络小说', qualification: '（3选1）', scope: '适用于提供网络小说在线阅读相关服务。', templates: [] },
       { name: '出版物', qualification: '（3选1）', scope: '适用于提供出版物（不含小说、动漫、学术期刊）在线阅读相关服务。', templates: [] },
       { name: '学术期刊', qualification: '（2选1）', scope: '适用于提供学术期刊发表、投稿、阅读等服务。', templates: [] },
-      { name: '其他视频', qualification: '（6选1）', scope: '适用于提供视频播放、观看等服务。', templates: [{ name: '虚拟数字人直播', desc: 'AI虚拟主播、实时互动' }] },
+      { name: '其他视频', qualification: '（6选1）：\n1、《信息网络传播视听节目许可证》\n2、《广播电视节目制作经营许可证》\n3、《广播电视频道许可证》（适用于电视台）\n4、《广播电视节目播出机构许可证》（适用于电视台）\n5、《统一社会信用代码》及《情况说明函件》（适用于政府主体）\n6、《事业单位法人证书》及该主体的主管部门许可文件（适用于事业单位主体）', scope: '适用于提供视频播放、观看等服务，包括但不限于业务类型为自办节目、转播节目、节目集成运营服务。', templates: [{ name: '虚拟数字人直播', desc: 'AI虚拟主播、实时互动' }] },
       { name: '视频广场', qualification: '（二选一）', scope: '适用于提供视频播放、观看等服务。', templates: [{ name: '短视频社区', desc: '视频上传、评论互动' }] },
       { name: '电台', qualification: '（2选1）', scope: '适用于提供电台/网络电台/FM/广播收听平台/音频节目等服务。', templates: [] },
       { name: '微短剧', qualification: '（2选1）', scope: '适用于提供网络微短剧视频播放、观看等服务。', templates: [] },

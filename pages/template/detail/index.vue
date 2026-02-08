@@ -352,6 +352,10 @@ const toggleFavorite = () => {
 // 立即购买 - 检查资质
 const contactAgent = async () => {
   try {
+    console.log('=== 开始资质检查 ===')
+    console.log('类目信息:', categoryInfo.value)
+    console.log('模板名称:', templateData.value.baseInfo.name)
+
     uni.showLoading({
       title: '检查资质中...',
       mask: true
@@ -364,13 +368,23 @@ const contactAgent = async () => {
       templateName: templateData.value.baseInfo.name
     })
 
+    console.log('资质检查结果:', result)
     uni.hideLoading()
 
     if (result.hasQualification) {
-      // 有资质，跳转到购买页面
-      uni.navigateTo({
-        url: `/pages/order/purchase?templateName=${encodeURIComponent(templateData.value.baseInfo.name)}`
+      // 有资质，显示提示并跳转到购买页面
+      uni.showToast({
+        title: `资质验证通过\n使用资质：${result.matchedQualification || '相关资质'}`,
+        icon: 'success',
+        duration: 2000
       })
+
+      // 延迟跳转，让用户看到提示
+      setTimeout(() => {
+        uni.navigateTo({
+          url: `/pages/order/purchase?templateName=${encodeURIComponent(templateData.value.baseInfo.name)}`
+        })
+      }, 2000)
     } else {
       // 没有资质，显示提示框
       const qualification = categoryInfo.value.qualification

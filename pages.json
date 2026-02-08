@@ -49,6 +49,13 @@
         "navigationBarTitleText": "模板详情",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/order/purchase",
+      "style": {
+        "navigationBarTitleText": "购买模板",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {

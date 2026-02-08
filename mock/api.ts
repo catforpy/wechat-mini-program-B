@@ -506,7 +506,8 @@ class MockApi {
   /**
    * 检查用户是否具备所需资质
    * 假数据逻辑：
-   * - "其他视频"类目：有资质
+   * - 用户拥有《广播电视节目制作经营许可证》和《增值电信业务经营许可证》
+   * - "其他视频"类目需要6选1的许可证，用户拥有其中之一，所以有资质
    * - 其他类目：无资质
    */
   async checkQualification(params: {
@@ -515,22 +516,66 @@ class MockApi {
     templateName: string
   }) {
     return this.request(async () => {
-      const { secondLevel } = params
+      const { secondLevel, firstLevel, templateName } = params
 
-      // 假数据：当前账号只有"其他视频"类目的资质
-      const hasQualification = secondLevel === '其他视频'
+      console.log('=== Mock API 资质检查 ===')
+      console.log('接收到的参数:', params)
+      console.log('一级类目:', firstLevel)
+      console.log('二级类目:', secondLevel)
+
+      // 模拟用户拥有的资质
+      const userQualifications = [
+        '《广播电视节目制作经营许可证》',
+        '《增值电信业务经营许可证》'
+      ]
+
+      // 各个类目要求的资质（从微信文档中提取）
+      const categoryRequirements: Record<string, string[]> = {
+        '其他视频': [
+          '《信息网络传播视听节目许可证》',
+          '《广播电视节目制作经营许可证》',
+          '《广播电视频道许可证》',
+          '《广播电视节目播出机构许可证》',
+          '《统一社会信用代码》',
+          '《事业单位法人证书》'
+        ]
+      }
+
+      // 检查是否有匹配的资质
+      let hasQualification = false
+      const requirements = categoryRequirements[secondLevel]
+
+      if (requirements) {
+        // 检查用户拥有的资质是否满足类目要求（任一即可）
+        hasQualification = userQualifications.some(userQual =>
+          requirements.some(req => userQual.includes(req))
+        )
+
+        console.log('类目要求的资质:', requirements)
+        console.log('用户拥有的资质:', userQualifications)
+        console.log('资质匹配结果:', hasQualification)
+      } else {
+        // 其他类目默认无资质
+        hasQualification = false
+        console.log('该类目暂无资质要求配置')
+      }
 
       if (hasQualification) {
-        // 有资质
+        // 找到匹配的资质
+        const matchedQualification = userQualifications.find(userQual =>
+          requirements.some(req => userQual.includes(req))
+        )
+        console.log('匹配的资质:', matchedQualification)
+
         return {
           hasQualification: true,
+          matchedQualification: matchedQualification,
           message: '资质验证通过'
         }
       } else {
-        // 无资质
         return {
           hasQualification: false,
-          missingQualifications: [`${secondLevel}类目相关资质`],
+          missingQualifications: requirements || [`${secondLevel}类目相关资质`],
           message: '缺少相关资质'
         }
       }
@@ -542,16 +587,23 @@ class MockApi {
    */
   async getUserQualifications() {
     return this.request(async () => {
-      // 假数据：返回用户已上传的资质（只有"其他视频"类目）
+      // 假数据：返回用户已上传的资质
       return [
         {
           id: 1,
           category: '文娱',
           secondLevel: '其他视频',
-          qualificationName: '《网络文化经营许可证》',
+          qualificationName: '《广播电视节目制作经营许可证》',
           status: 'approved',
           uploadTime: '2024-01-15T10:30:00Z',
-          expireTime: '2025-01-15T10:30:00Z'
+          expireTime: '2026-01-15T10:30:00Z'
+        },
+        {
+          id: 2,
+          qualificationName: '《增值电信业务经营许可证》',
+          status: 'approved',
+          uploadTime: '2024-02-20T10:30:00Z',
+          expireTime: '2027-02-20T10:30:00Z'
         }
       ]
     })
