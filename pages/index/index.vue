@@ -202,9 +202,23 @@ const handleAppClick = (app: QuickEntryApp) => {
 const handleTemplateClick = (template: TemplateInfo) => {
   console.log('点击模板:', template)
 
-  // 传递模板基本信息到详情页
+  // 获取当前二级类目信息（包含资质要求）
+  const currentSecondLevelCategory = currentSecondLevelCategories.value[currentSecondLevel.value]
+  const currentFirstLevelCategory = currentCategories.value[currentFirstLevel.value]
+
+  // 构建类目信息
+  const categoryInfo = {
+    firstLevel: currentFirstLevelCategory?.name || '',
+    secondLevel: currentSecondLevelCategory?.name || '',
+    qualification: currentSecondLevelCategory?.qualification || '',
+    scope: currentSecondLevelCategory?.scope || ''
+  }
+
+  console.log('类目信息:', categoryInfo)
+
+  // 传递模板基本信息和类目信息到详情页
   uni.navigateTo({
-    url: `/pages/template/detail/index?name=${encodeURIComponent(template.name)}&desc=${encodeURIComponent(template.desc)}&category=模板&userRole=merchant`
+    url: `/pages/template/detail/index?name=${encodeURIComponent(template.name)}&desc=${encodeURIComponent(template.desc)}&category=模板&userRole=merchant&firstLevel=${encodeURIComponent(categoryInfo.firstLevel)}&secondLevel=${encodeURIComponent(categoryInfo.secondLevel)}&qualification=${encodeURIComponent(categoryInfo.qualification)}&scope=${encodeURIComponent(categoryInfo.scope)}`
   })
 }
 </script>

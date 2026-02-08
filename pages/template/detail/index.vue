@@ -228,10 +228,19 @@
 import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import type { UserRole } from '@/types/template'
+import { qualificationApi } from '@/api'
 
 // 页面参数
 const templateId = ref<number>(0)
 const userRole = ref<UserRole>('merchant')  // 用户角色，默认为商户
+
+// 类目信息
+const categoryInfo = ref({
+  firstLevel: '',
+  secondLevel: '',
+  qualification: '',
+  scope: ''
+})
 
 // 模板数据
 const templateData = ref<any>({
@@ -340,13 +349,57 @@ const toggleFavorite = () => {
   })
 }
 
-// 联系代理商（商户端）
-const contactAgent = () => {
-  // TODO: 跳转到聊天页面或拨打电话
-  uni.showToast({
-    title: '正在联系代理商...',
-    icon: 'none'
-  })
+// 立即购买 - 检查资质
+const contactAgent = async () => {
+  try {
+    uni.showLoading({
+      title: '检查资质中...',
+      mask: true
+    })
+
+    // 调用后端API检查用户资质
+    const result = await qualificationApi.checkQualification({
+      firstLevel: categoryInfo.value.firstLevel,
+      secondLevel: categoryInfo.value.secondLevel,
+      templateName: templateData.value.baseInfo.name
+    })
+
+    uni.hideLoading()
+
+    if (result.hasQualification) {
+      // 有资质，跳转到购买页面
+      uni.navigateTo({
+        url: `/pages/order/purchase?templateName=${encodeURIComponent(templateData.value.baseInfo.name)}`
+      })
+    } else {
+      // 没有资质，显示提示框
+      const qualification = categoryInfo.value.qualification
+      const scope = categoryInfo.value.scope
+
+      uni.showModal({
+        title: '资质要求提示',
+        content: `【${categoryInfo.value.secondLevel}】类目需要以下资质：\n\n${qualification}\n\n适用范围：\n${scope}\n\n请前往"我的"页面完善资质信息后购买。`,
+        confirmText: '去完善',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            // 跳转到"我的"页面
+            uni.switchTab({
+              url: '/pages/profile/index'
+            })
+          }
+        }
+      })
+    }
+  } catch (error) {
+    uni.hideLoading()
+    console.error('资质检查失败:', error)
+    uni.showToast({
+      title: '资质检查失败，请稍后重试',
+      icon: 'none',
+      duration: 2000
+    })
+  }
 }
 
 // 分享模板（代理商端）
@@ -724,8 +777,28 @@ onLoad((options: any) => {
     userRole.value = roleParam as UserRole
   }
 
+  // 获取类目信息
+  const firstLevelParam = options?.firstLevel
+  const secondLevelParam = options?.secondLevel
+  const qualificationParam = options?.qualification
+  const scopeParam = options?.scope
+
+  if (firstLevelParam) {
+    categoryInfo.value.firstLevel = decodeURIComponent(firstLevelParam)
+  }
+  if (secondLevelParam) {
+    categoryInfo.value.secondLevel = decodeURIComponent(secondLevelParam)
+  }
+  if (qualificationParam) {
+    categoryInfo.value.qualification = decodeURIComponent(qualificationParam)
+  }
+  if (scopeParam) {
+    categoryInfo.value.scope = decodeURIComponent(scopeParam)
+  }
+
   console.log('解析后的模板名称:', templateData.value.baseInfo.name)
   console.log('解析后的 userRole:', userRole.value)
+  console.log('解析后的类目信息:', categoryInfo.value)
 
   // 动态生成模板数据
   generateDynamicTemplateData()

@@ -500,9 +500,88 @@ class MockApi {
       }
     })
   }
+
+  // ==================== 资质检查相关 ====================
+
+  /**
+   * 检查用户是否具备所需资质
+   * 假数据逻辑：
+   * - "其他视频"类目：有资质
+   * - 其他类目：无资质
+   */
+  async checkQualification(params: {
+    firstLevel: string
+    secondLevel: string
+    templateName: string
+  }) {
+    return this.request(async () => {
+      const { secondLevel } = params
+
+      // 假数据：当前账号只有"其他视频"类目的资质
+      const hasQualification = secondLevel === '其他视频'
+
+      if (hasQualification) {
+        // 有资质
+        return {
+          hasQualification: true,
+          message: '资质验证通过'
+        }
+      } else {
+        // 无资质
+        return {
+          hasQualification: false,
+          missingQualifications: [`${secondLevel}类目相关资质`],
+          message: '缺少相关资质'
+        }
+      }
+    })
+  }
+
+  /**
+   * 获取用户已上传的资质列表
+   */
+  async getUserQualifications() {
+    return this.request(async () => {
+      // 假数据：返回用户已上传的资质（只有"其他视频"类目）
+      return [
+        {
+          id: 1,
+          category: '文娱',
+          secondLevel: '其他视频',
+          qualificationName: '《网络文化经营许可证》',
+          status: 'approved',
+          uploadTime: '2024-01-15T10:30:00Z',
+          expireTime: '2025-01-15T10:30:00Z'
+        }
+      ]
+    })
+  }
 }
 
 // 创建单例
 const mockApi = new MockApi()
+
+// 为了适配 API 调用，添加命名空间方法
+;(mockApi as any).get = async (url: string) => {
+  if (url === 'qualification/user') {
+    return mockApi.getUserQualifications()
+  }
+  throw new Error('Unknown API endpoint')
+}
+
+;(mockApi as any).post = async (url: string, data: any) => {
+  if (url === 'qualification/check') {
+    return mockApi.checkQualification(data)
+  }
+  throw new Error('Unknown API endpoint')
+}
+
+;(mockApi as any).put = async (url: string, data: any) => {
+  throw new Error('Unknown API endpoint')
+}
+
+;(mockApi as any).delete = async (url: string, data: any) => {
+  throw new Error('Unknown API endpoint')
+}
 
 export default mockApi
