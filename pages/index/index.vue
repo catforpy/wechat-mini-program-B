@@ -134,28 +134,24 @@ const currentSecondLevel = ref(0)
 // 快速入口应用（4个Logo卡片）
 const quickEntryApps: QuickEntryApp[] = [
   {
-    name: '智慧零售',
-    icon: '/static/app-icons/app-icon-1.png',
-    path: '/pages/template/retail',
-    emoji: '🛒'
+    name: '会都',
+    icon: '/static/会都.jpg',
+    path: '/pages/template/retail'
   },
   {
-    name: '在线教育',
-    icon: '/static/app-icons/app-icon-2.png',
-    path: '/pages/template/education',
-    emoji: '📚'
+    name: '达管',
+    icon: '/static/达管.png',
+    path: '/pages/template/education'
   },
   {
-    name: '餐饮外卖',
-    icon: '/static/app-icons/app-icon-3.png',
-    path: '/pages/template/food',
-    emoji: '🍔'
+    name: '都达',
+    icon: '/static/都达.png',
+    path: '/pages/template/food'
   },
   {
-    name: '本地生活',
-    icon: '/static/app-icons/app-icon-4.png',
-    path: '/pages/template/life',
-    emoji: '🏠'
+    name: '金达',
+    icon: '/static/金达.jpg',
+    path: '/pages/template/life'
   }
 ]
 

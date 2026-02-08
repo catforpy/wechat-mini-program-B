@@ -214,7 +214,7 @@
       </view>
       <view class="bar-right">
         <view v-if="userRole === 'merchant'" class="consult-btn" @click="contactAgent">
-          <text class="consult-text">立即咨询</text>
+          <text class="consult-text">立即购买</text>
         </view>
         <view v-else-if="userRole === 'agent'" class="consult-btn" @click="viewSalesData">
           <text class="consult-text">查看销售数据</text>
