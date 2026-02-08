@@ -17,6 +17,7 @@ export interface SecondLevelCategory {
   scope?: string
   restrictions?: string
   templates: TemplateInfo[]
+  supportedTypes?: EntityType[] // 支持的主体类型
 }
 
 // 一级类目
@@ -24,6 +25,8 @@ export interface FirstLevelCategory {
   name: string
   hasData?: boolean
   secondLevel: SecondLevelCategory[]
+  supportedEntityTypes?: EntityType[] // 支持的主体类型
+  id?: number // 唯一ID
 }
 
 // 主体类型
@@ -842,6 +845,118 @@ export function getCategoriesByEntityType(entityType: EntityType): FirstLevelCat
     default:
       return []
   }
+}
+
+/**
+ * 获取所有主体类型合并后的类目（包含企业、个人、境外）
+ * 返回格式：一级类目名称 -> 支持该类目的主体类型列表
+ */
+export function getAllMergedCategories(): FirstLevelCategory[] {
+  // 使用 Map 来合并所有类目，记录每个类目被哪些主体类型支持
+  const categoryMap = new Map<string, {
+    name: string
+    supportedTypes: EntityType[]
+    secondLevel: SecondLevelCategory[]
+  }>()
+
+  // 处理企业类目
+  companyCategories.forEach((firstLevel: FirstLevelCategory) => {
+    const existing = categoryMap.get(firstLevel.name)
+    if (existing) {
+      if (!existing.supportedTypes.includes(EntityType.COMPANY)) {
+        existing.supportedTypes.push(EntityType.COMPANY)
+      }
+      // 合并二级类目（去重）
+      existing.secondLevel = mergeSecondLevelCategories(existing.secondLevel, firstLevel.secondLevel, EntityType.COMPANY)
+    } else {
+      categoryMap.set(firstLevel.name, {
+        name: firstLevel.name,
+        supportedTypes: [EntityType.COMPANY],
+        secondLevel: JSON.parse(JSON.stringify(firstLevel.secondLevel)) // 深拷贝
+      })
+    }
+  })
+
+  // 处理个人类目
+  personalCategories.forEach((firstLevel: FirstLevelCategory) => {
+    const existing = categoryMap.get(firstLevel.name)
+    if (existing) {
+      if (!existing.supportedTypes.includes(EntityType.PERSONAL)) {
+        existing.supportedTypes.push(EntityType.PERSONAL)
+      }
+      existing.secondLevel = mergeSecondLevelCategories(existing.secondLevel, firstLevel.secondLevel, EntityType.PERSONAL)
+    } else {
+      categoryMap.set(firstLevel.name, {
+        name: firstLevel.name,
+        supportedTypes: [EntityType.PERSONAL],
+        secondLevel: JSON.parse(JSON.stringify(firstLevel.secondLevel))
+      })
+    }
+  })
+
+  // 处理境外类目
+  overseasCategories.forEach((firstLevel: FirstLevelCategory) => {
+    const existing = categoryMap.get(firstLevel.name)
+    if (existing) {
+      if (!existing.supportedTypes.includes(EntityType.OVERSEAS)) {
+        existing.supportedTypes.push(EntityType.OVERSEAS)
+      }
+      existing.secondLevel = mergeSecondLevelCategories(existing.secondLevel, firstLevel.secondLevel, EntityType.OVERSEAS)
+    } else {
+      categoryMap.set(firstLevel.name, {
+        name: firstLevel.name,
+        supportedTypes: [EntityType.OVERSEAS],
+        secondLevel: JSON.parse(JSON.stringify(firstLevel.secondLevel))
+      })
+    }
+  })
+
+  // 转换为数组并添加标识支持的主体类型
+  return Array.from(categoryMap.values()).map((item, index) => ({
+    name: item.name,
+    hasData: true,
+    // 在每个二级类目中添加 supportedTypes 字段，标识哪些主体类型支持该类目
+    secondLevel: item.secondLevel.map((sl: any) => ({
+      ...sl,
+      supportedTypes: sl.supportedTypes || [] // 有些二级类目可能有特定的主体类型限制
+    })),
+    // 在一级类目上添加支持的主体类型列表（用于UI显示）
+    supportedEntityTypes: item.supportedTypes,
+    // 添加唯一ID
+    id: index
+  }))
+}
+
+/**
+ * 合并二级类目，并为每个类目标注支持的主体类型
+ */
+function mergeSecondLevelCategories(
+  existing: SecondLevelCategory[],
+  newItems: SecondLevelCategory[],
+  entityType: EntityType
+): SecondLevelCategory[] {
+  const result = [...existing]
+
+  newItems.forEach((newItem) => {
+    const existingIndex = result.findIndex(item => item.name === newItem.name)
+    if (existingIndex >= 0) {
+      // 已存在，添加主体类型标识
+      if (!result[existingIndex].supportedTypes) {
+        result[existingIndex].supportedTypes = []
+      }
+      if (!result[existingIndex].supportedTypes.includes(entityType)) {
+        result[existingIndex].supportedTypes.push(entityType)
+      }
+    } else {
+      // 不存在，添加新类目
+      result.push({
+        ...newItem,
+        supportedTypes: [entityType]
+      })
+    }
+  })
+
+  return result
 }
 
 export default {

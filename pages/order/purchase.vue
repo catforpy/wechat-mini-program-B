@@ -1,6 +1,6 @@
 <template>
   <view class="purchase-page">
-    <!-- 头部导航（带安全距离） -->
+    <!-- 头部导航（透明背景） -->
     <view class="header" :style="{ paddingTop: statusBarHeight + 'px' }">
       <view class="header-content">
         <view class="back-btn" @click="goBack">
@@ -10,8 +10,26 @@
       </view>
     </view>
 
+    <!-- 横向滑动标签栏 -->
+    <view class="tabs-container" :style="{ top: (statusBarHeight + 88) + 'px' }">
+      <scroll-view scroll-x class="tabs-scroll" show-scrollbar="false">
+        <view class="tabs-wrapper">
+          <view
+            v-for="(tab, index) in tabs"
+            :key="index"
+            class="tab-item"
+            :class="{ active: currentTab === index }"
+            @click="switchTab(index)"
+          >
+            <text class="tab-text">{{ tab }}</text>
+            <view v-if="currentTab === index" class="tab-underline"></view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
     <!-- 占位元素 -->
-    <view :style="{ height: statusBarHeight + 88 + 'px' }"></view>
+    <view :style="{ height: statusBarHeight + 88 + 100 + 'px' }"></view>
 
     <!-- 滚动内容区 -->
     <scroll-view scroll-y class="content-scroll">
@@ -300,6 +318,10 @@ import { onLoad } from '@dcloudio/uni-app'
 // 状态栏高度
 const statusBarHeight = ref(0)
 
+// 标签栏数据
+const tabs = ['关注', '推荐', '物流服务', '教育服务', '医疗服务', '政务民生']
+const currentTab = ref(1) // 默认选中"推荐"
+
 // 模板信息
 const templateName = ref('')
 const categoryName = ref('小程序模板')
@@ -382,6 +404,12 @@ const loadApplicantInfo = () => {
 // 返回
 const goBack = () => {
   uni.navigateBack()
+}
+
+// 切换标签
+const switchTab = (index: number) => {
+  currentTab.value = index
+  console.log('切换到标签:', tabs[index])
 }
 
 // 编辑字段
@@ -615,15 +643,19 @@ const handlePurchase = async () => {
 .purchase-page {
   min-height: 100vh;
   background-color: #f5f5f5;
+  background-image: url('/static/背景图001.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-// 头部导航
+// 头部导航（透明）
 .header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: transparent;
   z-index: 1000;
 }
 
@@ -651,6 +683,58 @@ const handlePurchase = async () => {
   font-size: 32rpx;
   font-weight: bold;
   color: #ffffff;
+}
+
+// 横向滑动标签栏
+.tabs-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: transparent;
+}
+
+.tabs-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.tabs-wrapper {
+  display: inline-flex;
+  padding: 0 30rpx;
+}
+
+.tab-item {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 30rpx;
+  margin-right: 10rpx;
+}
+
+.tab-text {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.tab-item.active .tab-text {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.tab-underline {
+  position: absolute;
+  bottom: 10rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 6rpx;
+  background-color: #ffffff;
+  border-radius: 3rpx;
 }
 
 // 滚动内容区

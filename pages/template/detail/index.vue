@@ -221,6 +221,51 @@
         </view>
       </view>
     </view>
+
+    <!-- 自定义资质要求弹窗 -->
+    <view v-if="showQualificationModal" class="qualification-modal" @click="closeQualificationModal">
+      <view class="qualification-modal-content" @click.stop>
+        <view class="qualification-modal-header">
+          <text class="modal-title">资质要求提示</text>
+          <view class="modal-close" @click="closeQualificationModal">×</view>
+        </view>
+
+        <!-- 主体类型标签栏 -->
+        <view class="entity-type-tabs">
+          <view
+            v-for="type in supportedEntityTypes"
+            :key="type"
+            :class="['entity-tab', { active: currentEntityType === type }]"
+            @click="switchEntityType(type)"
+          >
+            <text class="entity-tab-text">
+              {{ type === EntityType.COMPANY ? '企业' : type === EntityType.PERSONAL ? '个人' : '境外机构' }}
+            </text>
+          </view>
+        </view>
+
+        <!-- 资质要求内容 -->
+        <view class="qualification-content">
+          <view class="qualification-category">
+            <text class="category-name">【{{ categoryInfo.secondLevel }}】</text>
+            <text class="entity-type-name">（{{ currentEntityType === EntityType.COMPANY ? '企业' : currentEntityType === EntityType.PERSONAL ? '个人' : '境外机构' }}）</text>
+          </view>
+          <view class="qualification-text">
+            <text class="qualification-label">所需资质：</text>
+            <text class="qualification-detail">{{ getQualificationByType(currentEntityType) }}</text>
+          </view>
+          <view class="qualification-scope">
+            <text class="scope-label">适用范围：</text>
+            <text class="scope-detail">{{ getScopeByType(currentEntityType) }}</text>
+          </view>
+        </view>
+
+        <view class="qualification-modal-footer">
+          <button class="modal-btn cancel-btn" @click="closeQualificationModal">取消</button>
+          <button class="modal-btn confirm-btn" @click="gotoProfile">去完善</button>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -229,6 +274,14 @@ import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import type { UserRole } from '@/types/template'
 import { qualificationApi } from '@/api'
+import {
+  EntityType,
+  type FirstLevelCategory,
+  type SecondLevelCategory,
+  companyCategories,
+  personalCategories,
+  overseasCategories
+} from '@/data/categories-by-entity'
 
 // 页面参数
 const templateId = ref<number>(0)
@@ -241,6 +294,126 @@ const categoryInfo = ref({
   qualification: '',
   scope: ''
 })
+
+// 当前选中的主体类型（用于资质要求展示）
+const currentEntityType = ref<EntityType>(EntityType.COMPANY)
+
+// 支持的主体类型（根据类目动态获取）
+const supportedEntityTypes = ref<EntityType[]>([EntityType.COMPANY])
+
+// 资质弹窗显示状态
+const showQualificationModal = ref(false)
+
+// 根据主体类型获取资质要求
+const getQualificationByType = (type: EntityType): string => {
+  const secondLevelName = categoryInfo.value.secondLevel
+
+  // 根据主体类型查找对应的类目
+  let categories: FirstLevelCategory[]
+  if (type === EntityType.COMPANY) categories = companyCategories
+  else if (type === EntityType.PERSONAL) categories = personalCategories
+  else if (type === EntityType.OVERSEAS) categories = overseasCategories
+  else return '未知主体类型'
+
+  // 在该主体类型的类目中查找对应的二级类目
+  for (const firstLevel of categories) {
+    for (const secondLevel of firstLevel.secondLevel) {
+      if (secondLevel.name === secondLevelName) {
+        return secondLevel.qualification || '暂无资质要求'
+      }
+    }
+  }
+
+  return '该主体类型不支持此类目'
+}
+
+// 根据主体类型获取适用范围
+const getScopeByType = (type: EntityType): string => {
+  const secondLevelName = categoryInfo.value.secondLevel
+
+  // 根据主体类型查找对应的类目
+  let categories: FirstLevelCategory[]
+  if (type === EntityType.COMPANY) categories = companyCategories
+  else if (type === EntityType.PERSONAL) categories = personalCategories
+  else if (type === EntityType.OVERSEAS) categories = overseasCategories
+  else return '未知主体类型'
+
+  // 在该主体类型的类目中查找对应的二级类目
+  for (const firstLevel of categories) {
+    for (const secondLevel of firstLevel.secondLevel) {
+      if (secondLevel.name === secondLevelName) {
+        return secondLevel.scope || '暂无说明'
+      }
+    }
+  }
+
+  return '该主体类型不支持此类目'
+}
+
+// 切换主体类型
+const switchEntityType = (type: EntityType) => {
+  currentEntityType.value = type
+}
+
+// 打开资质弹窗
+const openQualificationModal = () => {
+  showQualificationModal.value = true
+}
+
+// 关闭资质弹窗
+const closeQualificationModal = () => {
+  showQualificationModal.value = false
+}
+
+// 跳转到我的页面
+const gotoProfile = () => {
+  closeQualificationModal()
+  uni.switchTab({
+    url: '/pages/profile/index'
+  })
+}
+
+// 确定当前类目支持哪些主体类型
+const determineSupportedEntityTypes = () => {
+  const secondLevelName = categoryInfo.value.secondLevel
+
+  const types: EntityType[] = []
+
+  // 检查企业类目是否包含这个类目
+  const hasCompany = companyCategories.some((firstLevel: FirstLevelCategory) =>
+    firstLevel.secondLevel.some((secondLevel: SecondLevelCategory) =>
+      secondLevel.name === secondLevelName
+    )
+  )
+  if (hasCompany) types.push(EntityType.COMPANY)
+
+  // 检查个人类目是否包含这个类目
+  const hasPersonal = personalCategories.some((firstLevel: FirstLevelCategory) =>
+    firstLevel.secondLevel.some((secondLevel: SecondLevelCategory) =>
+      secondLevel.name === secondLevelName
+    )
+  )
+  if (hasPersonal) types.push(EntityType.PERSONAL)
+
+  // 检查境外类目是否包含这个类目
+  const hasOverseas = overseasCategories.some((firstLevel: FirstLevelCategory) =>
+    firstLevel.secondLevel.some((secondLevel: SecondLevelCategory) =>
+      secondLevel.name === secondLevelName
+    )
+  )
+  if (hasOverseas) types.push(EntityType.OVERSEAS)
+
+  supportedEntityTypes.value = types
+
+  // 设置默认选中的主体类型（优先选择企业）
+  if (types.includes(EntityType.COMPANY)) {
+    currentEntityType.value = EntityType.COMPANY
+  } else if (types.length > 0) {
+    currentEntityType.value = types[0]
+  }
+
+  console.log('支持的主体类型:', types)
+}
 
 // 模板数据
 const templateData = ref<any>({
@@ -386,24 +559,8 @@ const contactAgent = async () => {
         })
       }, 2000)
     } else {
-      // 没有资质，显示提示框
-      const qualification = categoryInfo.value.qualification
-      const scope = categoryInfo.value.scope
-
-      uni.showModal({
-        title: '资质要求提示',
-        content: `【${categoryInfo.value.secondLevel}】类目需要以下资质：\n\n${qualification}\n\n适用范围：\n${scope}\n\n请前往"我的"页面完善资质信息后购买。`,
-        confirmText: '去完善',
-        cancelText: '取消',
-        success: (res) => {
-          if (res.confirm) {
-            // 跳转到"我的"页面
-            uni.switchTab({
-              url: '/pages/profile/index'
-            })
-          }
-        }
-      })
+      // 没有资质，显示自定义提示框
+      openQualificationModal()
     }
   } catch (error) {
     uni.hideLoading()
@@ -813,6 +970,9 @@ onLoad((options: any) => {
   console.log('解析后的模板名称:', templateData.value.baseInfo.name)
   console.log('解析后的 userRole:', userRole.value)
   console.log('解析后的类目信息:', categoryInfo.value)
+
+  // 确定支持的主体类型
+  determineSupportedEntityTypes()
 
   // 动态生成模板数据
   generateDynamicTemplateData()
@@ -1288,5 +1448,160 @@ onMounted(() => {
     font-size: $font-size-lg;
     color: $text-color-secondary;
   }
+}
+
+// 资质要求弹窗
+.qualification-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.qualification-modal-content {
+  width: 600rpx;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.qualification-modal-header {
+  position: relative;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .modal-close {
+    position: absolute;
+    right: 30rpx;
+    font-size: 50rpx;
+    color: #999;
+    line-height: 1;
+  }
+}
+
+// 主体类型标签栏
+.entity-type-tabs {
+  display: flex;
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.entity-tab {
+  flex: 1;
+  padding: 16rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  margin: 0 5rpx;
+  background-color: #f5f5f5;
+  transition: all 0.3s;
+
+  &.active {
+    background-color: #667eea;
+
+    .entity-tab-text {
+      color: #ffffff;
+    }
+  }
+
+  .entity-tab-text {
+    font-size: 26rpx;
+    color: #666;
+  }
+}
+
+// 资质内容区域
+.qualification-content {
+  padding: 30rpx;
+  max-height: 600rpx;
+  overflow-y: auto;
+}
+
+.qualification-category {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  flex-wrap: wrap;
+
+  .category-name {
+    font-size: 30rpx;
+    font-weight: bold;
+    color: #333;
+    margin-right: 10rpx;
+  }
+
+  .entity-type-name {
+    font-size: 24rpx;
+    color: #667eea;
+    background-color: #f0f5ff;
+    padding: 4rpx 12rpx;
+    border-radius: 4rpx;
+  }
+}
+
+.qualification-text,
+.qualification-scope {
+  margin-bottom: 20rpx;
+  line-height: 1.8;
+
+  .qualification-label,
+  .scope-label {
+    font-size: 26rpx;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 8rpx;
+  }
+
+  .qualification-detail,
+  .scope-detail {
+    font-size: 26rpx;
+    color: #666;
+    white-space: pre-wrap;
+  }
+}
+
+.qualification-modal-footer {
+  display: flex;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 28rpx;
+  border: none;
+  border-radius: 0;
+  background-color: #ffffff;
+
+  &::after {
+    border: none;
+  }
+}
+
+.cancel-btn {
+  color: #666;
+  border-right: 1rpx solid #f0f0f0;
+}
+
+.confirm-btn {
+  color: #667eea;
+  font-weight: bold;
 }
 </style>

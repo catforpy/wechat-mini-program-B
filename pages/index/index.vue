@@ -1,26 +1,27 @@
 <template>
   <view class="index-page">
+    <!-- 顶部横向标签栏（关注、推荐、一级类目） -->
+    <view class="top-tabs-container" :style="{ paddingTop: statusBarHeight + 'px' }">
+      <scroll-view scroll-x class="top-tabs-scroll" show-scrollbar="false">
+        <view class="top-tabs-wrapper">
+          <view
+            v-for="(tab, index) in topTabs"
+            :key="index"
+            :class="['top-tab-item', { active: currentTopTab === index }]"
+            @click="handleTopTabChange(index)"
+          >
+            <text class="tab-text">{{ tab }}</text>
+            <view v-if="currentTopTab === index" class="tab-underline"></view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
     <!-- 搜索框区域 -->
     <view class="search-container">
       <view class="search-box">
         <input class="search-input" type="text" placeholder="搜索小程序模板" />
       </view>
-    </view>
-
-    <!-- 主体类型选择 -->
-    <view class="entity-type-container">
-      <scroll-view scroll-x class="entity-type-scroll" show-scrollbar={false}>
-        <view class="entity-type-wrapper">
-          <view
-            v-for="(entity, index) in entityTypes"
-            :key="index"
-            :class="['entity-type-item', { active: currentEntityType === index }]"
-            @click="handleEntityTypeChange(index)"
-          >
-            {{ entity.name }}
-          </view>
-        </view>
-      </scroll-view>
     </view>
 
     <!-- 快速入口 - 4个Logo卡片 -->
@@ -98,18 +99,44 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { getCategoriesByEntityType, EntityType } from '@/data/categories-by-entity'
+import { ref, computed, onMounted } from 'vue'
+import { getAllMergedCategories, type FirstLevelCategory } from '@/data/categories-by-entity'
+
+// 状态栏高度
+const statusBarHeight = ref(0)
+
+// 顶部标签栏数据
+const currentTopTab = ref(1) // 默认选中"推荐"
+
+// 所有合并的类目（包含企业、个人、境外）
+const allMergedCategories = ref<FirstLevelCategory[]>([])
+
+// 顶部标签栏
+const topTabs = computed(() => {
+  // 动态生成：关注、推荐、以及所有一级类目
+  const firstLevelCategories = allMergedCategories.value.map(c => c.name)
+  return ['关注', '推荐', ...firstLevelCategories]
+})
+
+onMounted(() => {
+  const systemInfo = uni.getSystemInfoSync()
+  statusBarHeight.value = systemInfo.statusBarHeight || 0
+
+  // 加载所有合并的类目数据
+  allMergedCategories.value = getAllMergedCategories()
+  console.log('所有合并的类目数量:', allMergedCategories.value.length)
+})
+
+// 切换顶部标签
+const handleTopTabChange = (index: number) => {
+  currentTopTab.value = index
+  console.log('切换顶部标签:', topTabs.value[index])
+}
 
 // 类型定义
 interface TemplateInfo {
   name: string
   desc: string
-}
-
-interface EntityTypeOption {
-  name: string
-  type: EntityType
 }
 
 interface QuickEntryApp {
@@ -119,15 +146,7 @@ interface QuickEntryApp {
   emoji?: string
 }
 
-// 主体类型选项
-const entityTypes: EntityTypeOption[] = [
-  { name: '企业', type: EntityType.COMPANY },
-  { name: '个人', type: EntityType.PERSONAL },
-  { name: '境外', type: EntityType.OVERSEAS }
-]
-
 // 当前选中索引
-const currentEntityType = ref(0)
 const currentFirstLevel = ref(0)
 const currentSecondLevel = ref(0)
 
@@ -155,10 +174,9 @@ const quickEntryApps: QuickEntryApp[] = [
   }
 ]
 
-// 当前类目数据（根据主体类型）
+// 当前类目数据（使用所有合并的类目）
 const currentCategories = computed(() => {
-  const entityType = entityTypes[currentEntityType.value].type
-  return getCategoriesByEntityType(entityType)
+  return allMergedCategories.value
 })
 
 // 当前二级类目
@@ -170,13 +188,6 @@ const currentSecondLevelCategories = computed(() => {
 const currentThirdLevelTemplates = computed(() => {
   return currentSecondLevelCategories.value[currentSecondLevel.value]?.templates || []
 })
-
-// 切换主体类型
-const handleEntityTypeChange = (index: number) => {
-  currentEntityType.value = index
-  currentFirstLevel.value = 0
-  currentSecondLevel.value = 0
-}
 
 // 切换一级类目
 const handleFirstLevelChange = (index: number) => {
@@ -227,12 +238,17 @@ const handleTemplateClick = (template: TemplateInfo) => {
 .index-page {
   min-height: 100vh;
   background-color: #f5f5f5;
+  background-image: url('/static/背景图001.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding-bottom: 120rpx;
 }
 
-// 搜索框区域
+// 搜索框区域（透明背景）
 .search-container {
-  background-color: #ffffff;
+  margin-top: 100rpx; // 为顶部标签栏留出空间
+  background: transparent;
   padding: 20rpx 30rpx;
 
   .search-box {
@@ -247,40 +263,6 @@ const handleTemplateClick = (template: TemplateInfo) => {
       flex: 1;
       font-size: 28rpx;
       color: #333;
-    }
-  }
-}
-
-// 主体类型选择
-.entity-type-container {
-  background-color: #ffffff;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
-
-  .entity-type-scroll {
-    white-space: nowrap;
-  }
-
-  .entity-type-wrapper {
-    display: inline-flex;
-    padding: 0 20rpx;
-  }
-
-  .entity-type-item {
-    flex-shrink: 0;
-    padding: 16rpx 40rpx;
-    margin: 0 10rpx;
-    font-size: 28rpx;
-    color: #666;
-    background-color: #f5f5f5;
-    border-radius: 40rpx;
-    text-align: center;
-    transition: all 0.3s;
-
-    &.active {
-      color: #ffffff;
-      background-color: #667eea;
-      font-weight: bold;
     }
   }
 }
@@ -338,6 +320,57 @@ const handleTemplateClick = (template: TemplateInfo) => {
         color: #333;
         text-align: center;
       }
+    }
+  }
+}
+
+// 顶部横向标签栏（淘宝风格，透明背景）
+.top-tabs-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: transparent;
+
+  .top-tabs-scroll {
+    width: 100%;
+    white-space: nowrap;
+  }
+
+  .top-tabs-wrapper {
+    display: inline-flex;
+    padding: 0 30rpx;
+  }
+
+  .top-tab-item {
+    position: relative;
+    flex-shrink: 0;
+    padding: 24rpx 32rpx;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+
+    .tab-text {
+      font-size: 28rpx;
+      color: rgba(255, 255, 255, 0.6);
+      white-space: nowrap;
+    }
+
+    &.active .tab-text {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .tab-underline {
+      position: absolute;
+      bottom: 8rpx;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40rpx;
+      height: 6rpx;
+      background-color: #ffffff;
+      border-radius: 3rpx;
     }
   }
 }
