@@ -135,6 +135,9 @@ const scrollLeft = ref(0)
 // 标记是否正在通过代码设置滚动（避免滚动事件冲突）
 const isProgrammaticScroll = ref(false)
 
+// 最小滚动边界（"推荐"标签位置），作为滚动限制
+const minScrollLeft = ref(0)
+
 /**
  * 计算并滚动到指定标签
  */
@@ -160,7 +163,6 @@ const scrollTabIntoView = (index: number) => {
 
       query.exec((res) => {
         console.log('>>> query.exec 结果返回，res 长度:', res?.length)
-        console.log('>>> 查询结果详情:', JSON.stringify(res, null, 2))
 
         if (!res || res.length < tabElements.length + 1) {
           console.log('=== 查询失败：结果数量不足 ===')
@@ -189,20 +191,26 @@ const scrollTabIntoView = (index: number) => {
           }
         }
 
-        console.log('需要滚动的距离:', accumulatedWidth)
+        // 取整，避免浮点数问题
+        const targetScrollLeft = Math.round(accumulatedWidth)
+
+        console.log('需要滚动的距离:', targetScrollLeft)
         console.log('当前 scrollLeft:', scrollLeft.value)
+
+        // 如果是"推荐"标签（索引1），保存为最小滚动边界
+        if (index === 1) {
+          minScrollLeft.value = targetScrollLeft
+          console.log('=== 设置最小滚动边界:', minScrollLeft.value)
+        }
 
         // 标记为程序化滚动
         isProgrammaticScroll.value = true
-        // 取整，避免浮点数问题
-        scrollLeft.value = Math.round(accumulatedWidth)
+        scrollLeft.value = targetScrollLeft
 
-        console.log('设置后 scrollLeft (取整后):', scrollLeft.value)
-        console.log('isProgrammaticScroll 设置为 true')
+        console.log('设置后 scrollLeft:', scrollLeft.value)
 
         // 延迟重置标记，避免影响用户手动滑动
         setTimeout(() => {
-          console.log('重置 isProgrammaticScroll 为 false')
           isProgrammaticScroll.value = false
         }, 500)
       })
@@ -212,6 +220,7 @@ const scrollTabIntoView = (index: number) => {
 
 /**
  * 处理顶部标签滚动事件
+ * 实现滚动边界：用户不能向右滚动超过"推荐"标签（最小边界）
  */
 const handleTopTabScroll = (e: any) => {
   const currentScrollLeft = e.detail.scrollLeft
@@ -222,8 +231,24 @@ const handleTopTabScroll = (e: any) => {
     return
   }
 
-  // 用户手动滚动，记录但不干预
-  console.log('[用户滚动] 位置:', currentScrollLeft)
+  // 检查是否超过最小边界
+  if (currentScrollLeft < minScrollLeft.value) {
+    console.log(`=== 超过最小边界，强制修正 ===`)
+    console.log(`当前滚动位置: ${currentScrollLeft}, 最小边界: ${minScrollLeft.value}`)
+
+    // 强制修正到边界位置
+    isProgrammaticScroll.value = true
+    scrollLeft.value = minScrollLeft.value
+
+    setTimeout(() => {
+      isProgrammaticScroll.value = false
+    }, 300)
+
+    return
+  }
+
+  // 用户手动滚动，在允许范围内
+  console.log('[用户滚动] 位置:', currentScrollLeft, '最小边界:', minScrollLeft.value)
 }
 
 // 所有合并的类目（包含企业、个人、境外）
