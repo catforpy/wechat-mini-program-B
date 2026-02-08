@@ -7,6 +7,7 @@
         class="top-tabs-scroll"
         show-scrollbar="false"
         :scroll-left="scrollLeft"
+        :scroll-with-animation="true"
         @scroll="handleTopTabScroll"
       >
         <view class="top-tabs-wrapper">
@@ -138,12 +139,16 @@ const isProgrammaticScroll = ref(false)
  * 计算并滚动到指定标签
  */
 const scrollTabIntoView = (index: number) => {
+  console.log('>>> scrollTabIntoView 被调用，目标索引:', index, '标签名:', topTabs.value[index])
+
   nextTick(() => {
     setTimeout(() => {
       const query = uni.createSelectorQuery()
 
       // 查询所有标签元素（用于计算累积宽度）
       const tabElements = topTabs.value.map((_, i) => `#tab-${i}`)
+
+      console.log('准备查询的标签元素:', tabElements)
 
       // 为每个标签添加查询
       tabElements.forEach(selector => {
@@ -154,21 +159,33 @@ const scrollTabIntoView = (index: number) => {
       query.select('.top-tabs-scroll').boundingClientRect()
 
       query.exec((res) => {
+        console.log('>>> query.exec 结果返回，res 长度:', res?.length)
+        console.log('>>> 查询结果详情:', JSON.stringify(res, null, 2))
+
         if (!res || res.length < tabElements.length + 1) {
-          console.log('=== 查询失败 ===')
+          console.log('=== 查询失败：结果数量不足 ===')
+          console.log('期望数量:', tabElements.length + 1, '实际数量:', res?.length)
           return
         }
 
         console.log('=== 滚动到标签 ===')
         console.log('目标索引:', index, '标签名:', topTabs.value[index])
 
-        // 计算目标标签之前所有标签的总宽度
+        // 计算目标标签之前所有标签的总宽度（包括 gap）
         let accumulatedWidth = 0
+        const gapWidth = 10 // CSS 中定义的 gap: 10rpx
+
         for (let i = 0; i < index; i++) {
           const rect = res[i] as any
           if (rect) {
             accumulatedWidth += rect.width
+            // 加上 gap（除了最后一个元素）
+            if (i < index - 1) {
+              accumulatedWidth += gapWidth
+            }
             console.log(`标签 ${i} (${topTabs.value[i]}) 宽度:`, rect.width, '累积:', accumulatedWidth)
+          } else {
+            console.log(`标签 ${i} 查询结果为空`)
           }
         }
 
@@ -177,12 +194,15 @@ const scrollTabIntoView = (index: number) => {
 
         // 标记为程序化滚动
         isProgrammaticScroll.value = true
-        scrollLeft.value = accumulatedWidth
+        // 取整，避免浮点数问题
+        scrollLeft.value = Math.round(accumulatedWidth)
 
-        console.log('设置后 scrollLeft:', scrollLeft.value)
+        console.log('设置后 scrollLeft (取整后):', scrollLeft.value)
+        console.log('isProgrammaticScroll 设置为 true')
 
         // 延迟重置标记，避免影响用户手动滑动
         setTimeout(() => {
+          console.log('重置 isProgrammaticScroll 为 false')
           isProgrammaticScroll.value = false
         }, 500)
       })
