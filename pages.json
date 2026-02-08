@@ -42,6 +42,13 @@
         "navigationBarTitleText": "我的",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/template/detail/index",
+      "style": {
+        "navigationBarTitleText": "模板详情",
+        "navigationStyle": "custom"
+      }
     }
   ],
   "globalStyle": {
