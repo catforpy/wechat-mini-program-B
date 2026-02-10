@@ -2,60 +2,24 @@
   <view class="profile-page">
     <!-- 1. 用户信息卡片 -->
     <view class="user-card" :style="{ paddingTop: statusBarHeight + 'px' }">
-      <!-- 返回按钮（从公司列表进入时显示） -->
-      <view v-if="companyName" class="back-button" :style="{ top: statusBarHeight + 20 + 'px' }" @tap="goBack">
-        <text class="back-icon">‹</text>
-        <text class="back-text">返回</text>
-      </view>
-
-      <!-- 从公司卡片进入时：显示公司信息（头像 + 名称并排） -->
-      <view v-if="companyName" class="company-info-row">
-        <view class="company-avatar-wrapper">
-          <image
-            v-if="userInfo.avatar"
-            class="company-avatar"
-            :src="userInfo.avatar"
-            mode="aspectFill"
-          />
-          <view v-else class="company-avatar default">
-            <text class="avatar-placeholder">{{ (companyName || '公司')[0] }}</text>
-          </view>
-          <view class="certification-badge" :class="`status-${userInfo.certificationStatus}`">
-            <text class="badge-text">{{ getCertificationText(userInfo.certificationStatus) }}</text>
-          </view>
+      <view class="user-avatar-wrapper">
+        <image
+          v-if="userInfo.avatar"
+          class="user-avatar"
+          :src="userInfo.avatar"
+          mode="aspectFill"
+        />
+        <view v-else class="user-avatar default">
+          <text class="avatar-placeholder">{{ userInfo.nickname?.charAt(0) || '用' }}</text>
         </view>
-        <view class="company-details">
-          <text class="company-name-display">{{ companyName || '未登录' }}</text>
-          <view class="company-meta-row">
-            <text class="company-type-text">{{ companyType === 'company' ? '企业' : '个体工商户' }}</text>
-            <text class="separator">·</text>
-            <text class="company-type-text">{{ getEntityTypeText(userInfo.entityType) }}</text>
-          </view>
+        <view class="certification-badge" :class="`status-${userInfo.certificationStatus}`">
+          <text class="badge-text">{{ getCertificationText(userInfo.certificationStatus) }}</text>
         </view>
       </view>
-
-      <!-- 直接访问时：显示用户信息（原有布局） -->
-      <view v-else>
-        <view class="user-avatar-wrapper">
-          <image
-            v-if="userInfo.avatar"
-            class="user-avatar"
-            :src="userInfo.avatar"
-            mode="aspectFill"
-          />
-          <view v-else class="user-avatar default">
-            <text class="avatar-placeholder">{{ userInfo.nickname?.charAt(0) || '用' }}</text>
-          </view>
-          <view class="certification-badge" :class="`status-${userInfo.certificationStatus}`">
-            <text class="badge-text">{{ getCertificationText(userInfo.certificationStatus) }}</text>
-          </view>
-        </view>
-        <view class="user-info">
-          <text class="user-name">{{ userInfo.nickname || '未登录' }}</text>
-          <text class="user-phone">{{ userInfo.phone || '' }}</text>
-        </view>
+      <view class="user-info">
+        <text class="user-name">{{ userInfo.nickname || '未登录' }}</text>
+        <text class="user-phone">{{ userInfo.phone || '' }}</text>
       </view>
-
       <view class="entity-type-wrapper" @tap="goToCompanyDetail">
         <text class="entity-type-label">主体类型：</text>
         <text class="entity-type-value">{{ getEntityTypeText(userInfo.entityType) }}</text>
@@ -390,8 +354,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { onLoad } from '@dcloudio/uni-app'
+import { ref, onMounted } from 'vue'
 
 // 状态栏高度
 const statusBarHeight = ref(0)
@@ -399,11 +362,6 @@ const statusBarHeight = ref(0)
 // 弹窗控制
 const showModal = ref(false)
 const selectedMiniProgram = ref<any>(null)
-
-// 公司信息（从URL参数获取）
-const companyId = ref<string | null>(null)
-const companyName = ref<string>('')
-const companyType = ref<'company' | 'individual' | ''>('')
 
 // 企业已审核通过的资质列表
 const approvedQualifications = ref([
@@ -422,9 +380,6 @@ const userInfo = ref({
   certificationStatus: 'certified' as 'uncertified' | 'pending' | 'certified' | 'rejected',
   certificationTime: '2025-01-15'
 })
-
-// 页面标题
-const pageTitle = ref('我的')
 
 // 最新订单（Mock数据）
 const latestOrder = ref({
@@ -622,17 +577,10 @@ const goToIndex = () => {
   })
 }
 
-// 跳转到企业详细信息页（返回到新的"我的"页面）
+// 跳转到企业详细信息页
 const goToCompanyDetail = () => {
-  uni.navigateBack({
-    delta: 1
-  })
-}
-
-// 返回上一页（从公司列表返回到index-new）
-const goBack = () => {
-  uni.navigateBack({
-    delta: 1
+  uni.navigateTo({
+    url: '/pages/profile/company-detail'
   })
 }
 
@@ -717,120 +665,15 @@ const handleLogout = () => {
   })
 }
 
-// 加载公司数据（根据companyId）
-const loadCompanyData = (id: string) => {
-  console.log('正在加载公司数据，companyId:', id)
-
-  // TODO: 调用后端API获取该公司的小程序数据
-  // api.getCompanyMiniPrograms(id).then(data => {
-  //   miniPrograms.value = data
-  // })
-
-  // TODO: 调用后端API获取该公司的资质信息
-  // api.getCompanyQualifications(id).then(data => {
-  //   approvedQualifications.value = data
-  // })
-
-  // 临时Mock数据：根据不同的companyId返回不同的小程序
-  if (id === '1') {
-    // 上海XX科技有限公司的小程序
-    miniPrograms.value = [
-      {
-        miniProgramId: 'mp123',
-        name: '张三的零售商城',
-        icon: '/static/haidu.jpg',
-        description: '一个完整的电商小程序',
-        status: 'approved' as any,
-        submitTime: '2025-01-20',
-        auditTime: '2025-01-22',
-        rejectReason: '',
-        estimatedCompletionTime: '2025-01-22',
-        developmentStatus: 'developing' as any,
-        developmentProgress: {
-          currentPhase: 3,
-          totalPhases: 5,
-          progress: 60,
-          estimatedCompletionTime: '2025-02-20',
-          phases: [
-            { phase: 1, name: '环境搭建', status: 'completed' as any, progress: 100 },
-            { phase: 2, name: '基础配置', status: 'completed' as any, progress: 100 },
-            { phase: 3, name: '功能开发', status: 'in_progress' as any, progress: 60 },
-            { phase: 4, name: '测试验收', status: 'pending' as any, progress: 0 },
-            { phase: 5, name: '部署上线', status: 'pending' as any, progress: 0 }
-          ]
-        },
-        permissions: ['view_progress', 'edit_info'],
-        createdAt: '2025-01-20',
-        updatedAt: '2025-02-01'
-      }
-    ]
-  } else if (id === '2') {
-    // 浦东新区XX餐饮店的小程序
-    miniPrograms.value = [
-      {
-        miniProgramId: 'mp456',
-        name: 'XX餐饮点餐系统',
-        icon: '/static/haidu.jpg',
-        description: '餐饮点餐小程序',
-        status: 'approved' as any,
-        submitTime: '2025-01-15',
-        auditTime: '2025-01-17',
-        rejectReason: '',
-        estimatedCompletionTime: '2025-01-17',
-        developmentStatus: 'ready' as any,
-        developmentProgress: {
-          currentPhase: 5,
-          totalPhases: 5,
-          progress: 100,
-          estimatedCompletionTime: '2025-01-17',
-          phases: []
-        },
-        permissions: ['view_progress', 'edit_info'],
-        createdAt: '2025-01-15',
-        updatedAt: '2025-01-20'
-      }
-    ]
-  } else {
-    // 其他公司暂无小程序
-    miniPrograms.value = []
-  }
-}
-
-// onLoad生命周期：获取页面参数和系统信息
-onLoad((options: any) => {
-  console.log('页面参数:', options)
-
+onMounted(() => {
   // 获取系统信息
   const systemInfo = uni.getSystemInfoSync()
   statusBarHeight.value = systemInfo.statusBarHeight || 0
 
-  // 获取URL参数
-  if (options.companyId) {
-    companyId.value = options.companyId
-    console.log('加载公司ID:', companyId.value)
-  }
-
-  if (options.name) {
-    companyName.value = decodeURIComponent(options.name)
-    console.log('加载公司名称:', companyName.value)
-  }
-
-  if (options.type) {
-    companyType.value = options.type
-    console.log('加载公司类型:', companyType.value)
-  }
-
-  // 设置页面标题（如果有公司名称，则显示公司名称）
-  const title = companyName.value || '我的'
-  pageTitle.value = title
+  // 设置导航栏标题
   uni.setNavigationBarTitle({
-    title: title
+    title: '我的'
   })
-
-  // 如果有companyId，加载该公司的小程序数据
-  if (companyId.value) {
-    loadCompanyData(companyId.value)
-  }
 })
 </script>
 
@@ -847,129 +690,6 @@ onLoad((options: any) => {
   padding: 40rpx;
   padding-bottom: 48rpx;
   color: #ffffff;
-  position: relative;
-
-  // 返回按钮
-  .back-button {
-    position: absolute;
-    left: 30rpx;
-    display: flex;
-    align-items: center;
-    gap: 4rpx;
-    padding: 8rpx 16rpx;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 24rpx;
-    backdrop-filter: blur(10rpx);
-    z-index: 10;
-    transition: all 0.2s;
-
-    .back-icon {
-      font-size: 40rpx;
-      font-weight: 300;
-      color: #fff;
-      line-height: 1;
-    }
-
-    .back-text {
-      font-size: 26rpx;
-      color: #fff;
-    }
-
-    &:active {
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(0.95);
-    }
-  }
-
-  // 公司信息行（头像 + 名称并排）
-  .company-info-row {
-    display: flex;
-    align-items: center;
-    gap: 24rpx;
-    margin-bottom: 24rpx;
-    padding-top: 140rpx;  // 避开返回按钮（statusBarHeight + 20px + 返回按钮高度）
-
-    .company-avatar-wrapper {
-      position: relative;
-      flex-shrink: 0;
-
-      .company-avatar {
-        width: 100rpx;
-        height: 100rpx;
-        border-radius: 50rpx;
-        border: 3rpx solid rgba(255, 255, 255, 0.3);
-
-        &.default {
-          background: rgba(255, 255, 255, 0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          .avatar-placeholder {
-            font-size: 48rpx;
-            font-weight: bold;
-            color: #ffffff;
-          }
-        }
-      }
-
-      .certification-badge {
-        position: absolute;
-        bottom: 0;
-        right: -8rpx;
-        padding: 6rpx 12rpx;
-        border-radius: 16rpx;
-        font-size: 18rpx;
-        white-space: nowrap;
-
-        &.status-uncertified {
-          background: rgba(255, 149, 0, 0.9);
-        }
-
-        &.status-pending {
-          background: rgba(33, 150, 243, 0.9);
-        }
-
-        &.status-certified {
-          background: rgba(7, 193, 96, 0.9);
-        }
-
-        &.status-rejected {
-          background: rgba(255, 59, 48, 0.9);
-        }
-      }
-    }
-
-    .company-details {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8rpx;
-
-      .company-name-display {
-        font-size: 32rpx;
-        font-weight: bold;
-        color: #ffffff;
-        display: block;
-      }
-
-      .company-meta-row {
-        display: flex;
-        align-items: center;
-        gap: 8rpx;
-        font-size: 24rpx;
-        opacity: 0.8;
-
-        .company-type-text {
-          color: #ffffff;
-        }
-
-        .separator {
-          color: rgba(255, 255, 255, 0.5);
-        }
-      }
-    }
-  }
 
   .user-avatar-wrapper {
     position: relative;
@@ -1048,31 +768,6 @@ onLoad((options: any) => {
 
     .entity-type-action {
       margin-left: 8rpx;
-    }
-  }
-
-  .current-company-wrapper {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    font-size: 26rpx;
-    margin-bottom: 16rpx;
-    padding: 12rpx 16rpx;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 12rpx;
-
-    .current-company-label {
-      opacity: 0.9;
-    }
-
-    .current-company-name {
-      font-weight: 600;
-      margin: 0 6rpx;
-    }
-
-    .current-company-type {
-      opacity: 0.8;
-      font-size: 24rpx;
     }
   }
 

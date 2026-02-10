@@ -337,14 +337,14 @@ const companyInfo = ref({
   address: '成都市武侯区天府三街218号',
   startDate: '2018-01-15',
   endDate: '2038-01-14',
-  licenseImage: '/static/营业执照.jpg'
+  licenseImage: '/static/business-license.jpg'
 })
 
 // 个体工商户信息
 const individualInfo = ref({
   name: '成都武侯区XX个体工商户',
   licenseNumber: '92510100MA61U7Y42X',
-  licenseImage: '/static/营业执照.jpg'
+  licenseImage: '/static/business-license.jpg'
 })
 
 // 对公账户信息
@@ -643,7 +643,7 @@ const handlePurchase = async () => {
 .purchase-page {
   min-height: 100vh;
   background-color: #f5f5f5;
-  background-image: url('/static/背景图001.png');
+  background-image: url('/static/background-001.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

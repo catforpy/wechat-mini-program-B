@@ -375,6 +375,20 @@ const handleMerchantRegister = async () => {
 
 // 页面加载时隐藏 tabBar
 onMounted(() => {
+  console.log('[登录页] ========== 检查屏幕方向 ==========')
+
+  const systemInfo = uni.getSystemInfoSync()
+  const windowWidth = systemInfo.windowWidth || 0
+  const windowHeight = systemInfo.windowHeight || 0
+
+  const isLandscape = windowWidth > windowHeight
+  console.log('[登录页] 窗口尺寸 - 宽:', windowWidth, '高:', windowHeight)
+  console.log('[登录页] 当前是否横屏:', isLandscape ? '❌ 是横屏' : '✓ 是竖屏')
+
+  if (isLandscape) {
+    console.log('[登录页] ⚠️⚠️⚠️ 警告:登录页面是横屏!')
+  }
+
   uni.hideTabBar({
     animation: false
   })
