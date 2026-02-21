@@ -1,0 +1,603 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "唐极课得",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/video/index",
+      "style": {
+        "navigationBarTitleText": "视频",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/message/index",
+      "style": {
+        "navigationBarTitleText": "消息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/message/platform-messages",
+      "style": {
+        "navigationBarTitleText": "平台消息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/live/index",
+      "style": {
+        "navigationBarTitleText": "直播",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/index-new",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/template/detail/index",
+      "style": {
+        "navigationBarTitleText": "模板详情",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/order/purchase",
+      "style": {
+        "navigationBarTitleText": "购买模板",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/orders",
+      "style": {
+        "navigationBarTitleText": "我的订单",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/company-detail",
+      "style": {
+        "navigationBarTitleText": "企业信息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/company/detail",
+      "style": {
+        "navigationBarTitleText": "企业详情",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/qualifications",
+      "style": {
+        "navigationBarTitleText": "资质管理",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/settings",
+      "style": {
+        "navigationBarTitleText": "设置",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/message/chat",
+      "style": {
+        "navigationBarTitleText": "聊天",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/message/chat-info",
+      "style": {
+        "navigationBarTitleText": "聊天信息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/message/chat-members",
+      "style": {
+        "navigationBarTitleText": "聊天成员",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/message/create-group",
+      "style": {
+        "navigationBarTitleText": "发起群聊",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/message/multi-chat",
+      "style": {
+        "navigationBarTitleText": "多人聊天",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/mini-programs",
+      "style": {
+        "navigationBarTitleText": "我的小程序",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/mini-admin/index",
+      "style": {
+        "navigationBarTitleText": "小程序管理",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/mini-admin/launch-config",
+      "style": {
+        "navigationBarTitleText": "App拉起配置",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/wallet",
+      "style": {
+        "navigationBarTitleText": "我的钱包",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/add-company",
+      "style": {
+        "navigationBarTitleText": "添加公司",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/cooperation-application",
+      "style": {
+        "navigationBarTitleText": "申请合作",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/leasing-application",
+      "style": {
+        "navigationBarTitleText": "申请租赁",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/cooperation-requests",
+      "style": {
+        "navigationBarTitleText": "合作请求",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/leasing-requests",
+      "style": {
+        "navigationBarTitleText": "租赁请求",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/real-name-info",
+      "style": {
+        "navigationBarTitleText": "实名信息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/profile-settings",
+      "style": {
+        "navigationBarTitleText": "个人资料",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/avatar-setting",
+      "style": {
+        "navigationBarTitleText": "头像设置",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/nickname-setting",
+      "style": {
+        "navigationBarTitleText": "昵称设置",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/phone-setting",
+      "style": {
+        "navigationBarTitleText": "手机号设置",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/management-team",
+      "style": {
+        "navigationBarTitleText": "管理团队",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/join-company",
+      "style": {
+        "navigationBarTitleText": "申请加入公司",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/team-requests",
+      "style": {
+        "navigationBarTitleText": "团队审批",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/mini-programs/browse",
+      "style": {
+        "navigationBarTitleText": "浏览页面",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/registrations",
+      "style": {
+        "navigationBarTitleText": "个人资讯",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/my-access",
+      "style": {
+        "navigationBarTitleText": "我的访问",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/intentions",
+      "style": {
+        "navigationBarTitleText": "意向项目",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/answers",
+      "style": {
+        "navigationBarTitleText": "专业解答",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/bill-management",
+      "style": {
+        "navigationBarTitleText": "账单管理",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/bill-info",
+      "style": {
+        "navigationBarTitleText": "账目信息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/funds-flow",
+      "style": {
+        "navigationBarTitleText": "资金流水",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/bill-detail",
+      "style": {
+        "navigationBarTitleText": "账单详情",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/publish-video",
+      "style": {
+        "navigationBarTitleText": "发表视频",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/start-live",
+      "style": {
+        "navigationBarTitleText": "发起直播",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/company-registration",
+      "style": {
+        "navigationBarTitleText": "企业注册",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/cooperations",
+      "style": {
+        "navigationBarTitleText": "我的合作",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/leasings",
+      "style": {
+        "navigationBarTitleText": "我的租赁",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/my-qrcode",
+      "style": {
+        "navigationBarTitleText": "我的二维码",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/company-shop",
+      "style": {
+        "navigationBarTitleText": "我的公司",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/company-registration-list",
+      "style": {
+        "navigationBarTitleText": "公司",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/company-shop-layout1",
+      "style": {
+        "navigationBarTitleText": "我的公司-版体1",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/company-shop-layout2",
+      "style": {
+        "navigationBarTitleText": "我的公司-版体2",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/my-collection",
+      "style": {
+        "navigationBarTitleText": "我的宝库",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/my-card",
+      "style": {
+        "navigationBarTitleText": "我的名片",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/my-favorites",
+      "style": {
+        "navigationBarTitleText": "名片收藏",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/wonderful-life",
+      "style": {
+        "navigationBarTitleText": "精彩生活",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/business-frontier",
+      "style": {
+        "navigationBarTitleText": "商务前讯",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/personal-basic-info",
+      "style": {
+        "navigationBarTitleText": "基本信息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/personal-work-experience",
+      "style": {
+        "navigationBarTitleText": "工作经历",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/personal-qualifications",
+      "style": {
+        "navigationBarTitleText": "资格证书",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/personal-attachments",
+      "style": {
+        "navigationBarTitleText": "附件管理",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/company-info",
+      "style": {
+        "navigationBarTitleText": "企业信息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/business-scope",
+      "style": {
+        "navigationBarTitleText": "经营范围",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/company-qualifications",
+      "style": {
+        "navigationBarTitleText": "企业资质",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/staff-management",
+      "style": {
+        "navigationBarTitleText": "人员管理",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/business-info",
+      "style": {
+        "navigationBarTitleText": "经营信息",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "唐极课得",
+    "navigationBarBackgroundColor": "#667eea",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "fontSize": "16px",
+    "height": "60px",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/video/index",
+        "text": "视频",
+        "iconPath": "static/tabbar/video.png",
+        "selectedIconPath": "static/tabbar/video-active.png"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "text": "消息",
+        "iconPath": "static/tabbar/message.png",
+        "selectedIconPath": "static/tabbar/message-active.png"
+      },
+      {
+        "pagePath": "pages/live/index",
+        "text": "直播",
+        "iconPath": "static/tabbar/live.png",
+        "selectedIconPath": "static/tabbar/live-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index-new",
+        "text": "我的",
+        "iconPath": "static/tabbar/profile.png",
+        "selectedIconPath": "static/tabbar/profile-active.png"
+      }
+    ]
+  },
+  "uniIdRouter": {}
+}

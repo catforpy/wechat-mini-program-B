@@ -1,0 +1,33 @@
+# Node modules
+会都销售app/node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build output
+会都销售app/unpackage/
+会都销售app/dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# Backups
+*_backup_*
+
+# Claude
+.claude/

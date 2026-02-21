@@ -1,0 +1,947 @@
+/**
+ * 微信小程序服务类目数据（按主体类型分类）
+ * 整理自微信开放文档
+ * 更新时间：2026-02-08
+ *
+ * 统计：
+ * - 非个人主体：24个一级类目（8个有数据，16个暂无具体分类开放）
+ * - 个人主体：9个一级类目（全部有数据）
+ * - 境外主体：15个一级类目（全部有数据）
+ */
+
+// 三级类目模板
+export interface TemplateInfo {
+  name: string      // 模板名称
+  desc: string      // 简短描述
+}
+
+// 二级类目
+export interface SecondLevelCategory {
+  name: string                    // 二级类目名称
+  qualification?: string          // 资质要求
+  scope?: string                  // 适用范围
+  templates: TemplateInfo[]      // 三级类目（小程序模板）
+}
+
+// 一级类目
+export interface FirstLevelCategory {
+  name: string                      // 一级类目名称
+  hasData: boolean                 // 是否有具体数据
+  secondLevel: SecondLevelCategory[] // 二级类目列表
+}
+
+// 主体类型
+export enum EntityType {
+  /** 非个人主体（企业、政府等组织） */
+  COMPANY = 'company',
+  /** 个人主体（个人开发者） */
+  PERSONAL = 'personal',
+  /** 境外主体（港澳台及海外） */
+  OVERSEAS = 'overseas'
+}
+
+// 按主体类型分类的类目数据
+export interface CategoriesByEntity {
+  entityType: EntityType
+  entityName: string
+  categories: FirstLevelCategory[]
+}
+
+// ==================== 1. 非个人主体类目（企业、政府等） - 24个一级类目 ====================
+export const companyCategories: FirstLevelCategory[] = [
+  {
+    name: '物流服务',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '教育服务',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '医疗服务',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '政务民生',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '金融业',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '交通服务',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '房地产服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '房屋中介',
+        qualification: '',
+        scope: '适用于提供租房、新房、二手房等房源信息展示、咨询、预约等服务。注：暂不支持房产在线交易。',
+        templates: [
+          { name: '二手房', desc: '二手房交易' },
+          { name: '新房', desc: '新楼盘' },
+          { name: '租房', desc: '房屋租赁' }
+        ]
+      },
+      {
+        name: '物业管理',
+        qualification: '',
+        scope: '适用于提供房屋物业费用缴纳，物业资讯、门禁、访客等。',
+        templates: [
+          { name: '物业缴费', desc: '物业费缴纳' },
+          { name: '访客系统', desc: '访客管理' }
+        ]
+      },
+      {
+        name: '房屋装修',
+        qualification: '',
+        scope: '适用于提供家居建材装修资讯、在线预约、人工咨询等服务。',
+        templates: [
+          { name: '装修设计', desc: '装修方案' },
+          { name: '建材采购', desc: '建材购买' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '生活服务',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: 'IT科技',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '基础电信运营商',
+        qualification: '《基础电信业务经营许可证》',
+        scope: '基础电信运营商及其分/子公司提供网上营业厅、话费充值、网费缴纳、客户服务等服务。',
+        templates: [
+          { name: '话费充值', desc: '话费充值' },
+          { name: '流量套餐', desc: '流量办理' }
+        ]
+      },
+      {
+        name: '电信业务代理商',
+        qualification: '与市级及以上运营商签署的合作协议（2家及以上）等',
+        scope: '提供网上营业厅流量套餐购买、话费充值、网费缴纳、宽带办理、客户服务等服务。',
+        templates: [
+          { name: '代理营业厅', desc: '运营商业务' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '餐饮服务',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '旅游服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '景区服务',
+        qualification: '',
+        scope: '适用于提供景区服务中心、景点推荐、导游、景点/公园门票等服务。',
+        templates: [
+          { name: '景点门票', desc: '景区门票' },
+          { name: '导游服务', desc: '导游讲解' }
+        ]
+      },
+      {
+        name: '旅行社',
+        qualification: '《旅行社业务经营许可证》',
+        scope: '旅行社提供相关服务。',
+        templates: [
+          { name: '国内旅游', desc: '国内游' },
+          { name: '出境旅游', desc: '出境游' }
+        ]
+      },
+      {
+        name: '住宿服务',
+        qualification: '（2选1）1、单家主体：《营业执照》（经营范围含住宿、旅店业、客房等与住宿相关）或《特种行业许可证》（经营范围含"旅馆业"）2、预订平台：需提供至少2家及以上与住宿服务提供方的《合作协议》及合作方的《特种行业许可证》/《营业执照》',
+        scope: '适用于提供公寓/民宿/酒店预订等服务。',
+        templates: [
+          { name: '酒店预订', desc: '酒店宾馆' },
+          { name: '民宿预订', desc: '民宿短租' },
+          { name: '公寓出租', desc: '长租公寓' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '时政信息',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '文娱',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '工具',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '记账',
+        qualification: '',
+        scope: '适用于提供价格记录、生活开销等模板功能的记账工具。',
+        templates: [
+          { name: '消费记账', desc: '日常记账' },
+          { name: '专业记账', desc: '财务记录' }
+        ]
+      },
+      {
+        name: '日历',
+        qualification: '',
+        scope: '适用于提供日历等服务。',
+        templates: [
+          { name: '万年历', desc: '日历查询' },
+          { name: '节假日', desc: '节假日提醒' }
+        ]
+      },
+      {
+        name: '天气',
+        qualification: '',
+        scope: '适用于提供天气查询等服务。',
+        templates: [
+          { name: '天气预报', desc: '天气查询' },
+          { name: '空气质量', desc: '空气质量' }
+        ]
+      },
+      {
+        name: '计算器',
+        qualification: '',
+        scope: '适用于提供计算工具等服务。',
+        templates: [
+          { name: '标准计算器', desc: '基础计算' },
+          { name: '房贷计算', desc: '房贷计算' }
+        ]
+      },
+      {
+        name: '预约/报名',
+        qualification: '',
+        scope: '适用于提供预约/报名功能等服务。',
+        templates: [
+          { name: '在线预约', desc: '服务预约' },
+          { name: '活动报名', desc: '活动报名' }
+        ]
+      },
+      {
+        name: '健康管理',
+        qualification: '',
+        scope: '适用于记录/测试与健康相关内容，如：身高、体重、个人身体管理记录等服务。',
+        templates: [
+          { name: '运动健身', desc: '健身记录' },
+          { name: '体重管理', desc: '体重记录' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '电商平台',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '商家自营',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '食品饮料',
+        qualification: '（4选1）1.《食品经营许可证》2.《食品生产许可证》3. 仅销售预包装食品提供：《预包装食品销售备案凭证》4. 口岸商店提供：《国境口岸卫生许可证》',
+        scope: '适用于提供食品、饮料、茶叶、零食、调料等产品在线销售及配送相关服务。',
+        templates: [
+          { name: '零食饮料', desc: '休闲零食' },
+          { name: '茶叶销售', desc: '茶叶茗茶' },
+          { name: '生鲜食品', desc: '生鲜蔬果' }
+        ]
+      },
+      {
+        name: '百货商场',
+        qualification: '小程序主体《营业执照》、3家专柜或品牌租户的《食品经营许可证》、3张外立面照片、3张场内实际经营照片、包含至少3种品类的发票、《承诺函》',
+        scope: '适用于有线下大型实体的百货商场、购物中心提供服饰、化妆品、食品等服务。',
+        templates: [
+          { name: '购物中心', desc: '综合购物' },
+          { name: '品牌专柜', desc: '品牌商品' }
+        ]
+      },
+      {
+        name: '母婴食品',
+        qualification: '（4选1）1、《食品经营许可证》2、《食品生产许可证》3、仅销售预包装食品提供：《预包装食品销售备案凭证》4、口岸商店提供：《国境口岸卫生许可证》',
+        scope: '适用于提供婴幼儿奶粉、辅食等在线销售及配送。',
+        templates: [
+          { name: '奶粉销售', desc: '婴幼儿奶粉' },
+          { name: '辅食销售', desc: '婴幼儿辅食' }
+        ]
+      },
+      {
+        name: '美妆',
+        qualification: '',
+        scope: '适用于提供化妆品、护肤品等在线销售。',
+        templates: [
+          { name: '护肤彩妆', desc: '护肤彩妆' },
+          { name: '香水香氛', desc: '香水香氛' }
+        ]
+      },
+      {
+        name: '3C数码',
+        qualification: '',
+        scope: '适用于提供3C数码产品在线销售。',
+        templates: [
+          { name: '手机数码', desc: '手机数码' },
+          { name: '电脑办公', desc: '电脑配件' }
+        ]
+      },
+      {
+        name: '运动户外',
+        qualification: '',
+        scope: '适用于提供运动、户外用品等在线销售。',
+        templates: [
+          { name: '运动装备', desc: '运动用品' },
+          { name: '户外装备', desc: '户外用品' }
+        ]
+      },
+      {
+        name: '家居家纺',
+        qualification: '',
+        scope: '适用于提供家居、家纺用品等在线销售。',
+        templates: [
+          { name: '家居用品', desc: '家居装饰' },
+          { name: '家纺床品', desc: '床品家纺' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '商业服务',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '公益',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '社交',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '体育',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '体育场馆服务',
+        qualification: '',
+        scope: '适用于提供体育场馆预订等服务。',
+        templates: [
+          { name: '场馆预订', desc: '场地预订' },
+          { name: '体育培训', desc: '运动培训' }
+        ]
+      },
+      {
+        name: '在线健身',
+        qualification: '',
+        scope: '适用于提供各类型的健身运动在线学习/在线指导等服务。',
+        templates: [
+          { name: '健身课程', desc: '健身指导' },
+          { name: '运动打卡', desc: '运动记录' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '汽车服务',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '资讯',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '信息资讯',
+        qualification: '',
+        scope: '适用于提供娱乐、美妆、餐饮等单一行业资讯展示等服务。注：如提供两个及以上行业资讯相关服务，需选择【文娱-资讯广场】类目。',
+        templates: [
+          { name: '美食资讯', desc: '美食推荐' },
+          { name: '时尚资讯', desc: '时尚前沿' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '深度合成',
+    hasData: false,
+    secondLevel: []
+  },
+  {
+    name: '内测',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '数字藏品',
+        qualification: '该类目正在内测阶段',
+        scope: '适用于数字藏品展示和一级赠送等服务。',
+        templates: [
+          { name: '数字藏品', desc: 'NFT展示' }
+        ]
+      }
+    ]
+  }
+]
+
+// ==================== 2. 个人主体类目（个人开发者） - 9个一级类目 ====================
+export const personalCategories: FirstLevelCategory[] = [
+  {
+    name: '物流服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '查件',
+        qualification: '',
+        scope: '适用于提供快递、物流行业的查件业务等服务。注：不包含寄件、收件业务。',
+        templates: [
+          { name: '快递查询', desc: '物流查件' },
+          { name: '物流跟踪', desc: '包裹追踪' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '教育服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '婴幼儿教育',
+        qualification: '',
+        scope: '适用于0～6岁年龄阶段的婴幼儿教育。',
+        templates: [
+          { name: '早教课程', desc: '幼儿教育' },
+          { name: '启蒙教育', desc: '儿童启蒙' }
+        ]
+      },
+      {
+        name: '在线教育',
+        qualification: '',
+        scope: '适用于在线教育、网络教育或者远程教育等以互联网为载体的教育服务。',
+        templates: [
+          { name: '在线课程', desc: '网课平台' },
+          { name: '知识分享', desc: '技能分享' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '交通服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '代驾服务',
+        qualification: '',
+        scope: '提供代驾服务。注：不包含提供顺风车、网约车等服务。',
+        templates: [
+          { name: '代驾服务', desc: '酒后代驾' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '生活服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '丽人服务',
+        qualification: '',
+        scope: '提供美甲、美容、美睫、美发、纹身、祛痘、纤体瘦身、舞蹈、瑜伽等不含医疗美容服务。',
+        templates: [
+          { name: '美甲服务', desc: '美甲美睫' },
+          { name: '美发沙龙', desc: '美发造型' },
+          { name: '舞蹈瑜伽', desc: '舞蹈瑜伽' }
+        ]
+      },
+      {
+        name: '婚庆服务',
+        qualification: '',
+        scope: '提供婚礼庆典策划、婚纱摄影、婚宴酒席、婚礼摄像、蜜月旅行等相关服务。',
+        templates: [
+          { name: '婚纱摄影', desc: '婚纱照' },
+          { name: '婚庆策划', desc: '婚礼策划' }
+        ]
+      },
+      {
+        name: '家政服务',
+        qualification: '',
+        scope: '适用于提供家政服务，如保姆、月嫂、房屋保洁、家电维修、数码电器维修等在线预约等服务。',
+        templates: [
+          { name: '家政保洁', desc: '家庭保洁' },
+          { name: '家电维修', desc: '维修服务' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '餐饮服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '餐厅排队',
+        qualification: '',
+        scope: '提供个体餐饮门店提供就餐线上取号、排号等排队服务。注：不包含线上点餐、外卖等服务。',
+        templates: [
+          { name: '餐厅排队', desc: '线上取号' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '旅游服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '出境WiFi',
+        qualification: '',
+        scope: '提供出境WIFI租赁/销售。注：不包含境外流量、话费充值服务。',
+        templates: [
+          { name: '出境WiFi', desc: 'WiFi租赁' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '工具',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '记账',
+        qualification: '',
+        scope: '提供如：消费记录等模板功能的记账工具。',
+        templates: [
+          { name: '消费记账', desc: '日常记账' }
+        ]
+      },
+      {
+        name: '日历',
+        qualification: '',
+        scope: '提供日历相关服务。',
+        templates: [
+          { name: '万年历', desc: '日历查询' },
+          { name: '节假日', desc: '节假日提醒' }
+        ]
+      },
+      {
+        name: '天气',
+        qualification: '',
+        scope: '提供天气查询等相关服务。',
+        templates: [
+          { name: '天气预报', desc: '天气查询' }
+        ]
+      },
+      {
+        name: '计算器',
+        qualification: '',
+        scope: '提供计算工具等。',
+        templates: [
+          { name: '标准计算器', desc: '基础计算' }
+        ]
+      },
+      {
+        name: '预约/报名',
+        qualification: '',
+        scope: '提供预约/报名功能。',
+        templates: [
+          { name: '在线预约', desc: '服务预约' },
+          { name: '活动报名', desc: '活动报名' }
+        ]
+      },
+      {
+        name: '健康管理',
+        qualification: '',
+        scope: '提供身高、体重等健康管理记录。',
+        templates: [
+          { name: '运动健身', desc: '健身记录' },
+          { name: '体重管理', desc: '体重记录' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '商业服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '律师',
+        qualification: '《律师执业资格证》',
+        scope: '适用于已通过国家司法考试并依法取得律师执业证书的执业人员接受委托或者指定，为当事人提供在线法律服务。',
+        templates: [
+          { name: '法律咨询', desc: '在线咨询' }
+        ]
+      },
+      {
+        name: '企业管理',
+        qualification: '',
+        scope: '适用于提供企业办公工具/办公管理、门店信息管理、展示等服务。',
+        templates: [
+          { name: '企业管理', desc: '办公管理' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '体育',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '体育培训',
+        qualification: '',
+        scope: '提供各种体育项目培训/学习的服务。',
+        templates: [
+          { name: '体育培训', desc: '运动培训' }
+        ]
+      },
+      {
+        name: '在线健身',
+        qualification: '',
+        scope: '提供各类型的健身运动在线学习/在线指导服务。',
+        templates: [
+          { name: '健身课程', desc: '健身指导' },
+          { name: '运动打卡', desc: '运动记录' }
+        ]
+      }
+    ]
+  }
+]
+
+// ==================== 3. 境外主体类目（港澳台及海外） - 15个一级类目 ====================
+export const overseasCategories: FirstLevelCategory[] = [
+  {
+    name: '快递业与邮政',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '快递、物流',
+        qualification: '',
+        scope: '适用于快递、物流行业的查件等服务。',
+        templates: [
+          { name: '快递查询', desc: '物流查件' },
+          { name: '物流跟踪', desc: '包裹追踪' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '教育',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '在线教育',
+        qualification: '',
+        scope: '适用于在线教育、网络教育或者远程教育等以互联网为载体的教育服务。',
+        templates: [
+          { name: '在线课程', desc: '网课平台' },
+          { name: '语言培训', desc: '语言学习' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '出行与交通',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '代驾',
+        qualification: '',
+        scope: '适用于提供代驾服务。注：暂不支持提供"顺风车、网约车"等服务。',
+        templates: [
+          { name: '代驾服务', desc: '酒后代驾' }
+        ]
+      },
+      {
+        name: '出租车',
+        qualification: '',
+        scope: '适用于出租车在线预约、行程信息展示等服务。',
+        templates: [
+          { name: '出租车', desc: '出租车预约' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '房地产',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '房地产',
+        qualification: '同时提供：1、《公司注册证》原件及翻译件（英文或中文）2、《房地产代理注册登记证》或《房地产发展商注册证》原件及翻译件（英文或中文）',
+        scope: '适用于提供租房、新房、二手房等房源信息展示、咨询、预约、缴纳房租等服务。',
+        templates: [
+          { name: '房屋租赁', desc: '租房服务' },
+          { name: '新房销售', desc: '新楼盘' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '生活服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '摄影/扩印',
+        qualification: '',
+        scope: '适用于提供证件照、艺术照摄影、相片扩印等服务。',
+        templates: [
+          { name: '摄影服务', desc: '照片拍摄' }
+        ]
+      },
+      {
+        name: '婚庆服务',
+        qualification: '',
+        scope: '适用于提供婚礼庆策划、婚纱摄影、婚宴酒席、婚礼摄像、蜜月旅行等婚庆类服务。',
+        templates: [
+          { name: '婚纱摄影', desc: '婚纱照' },
+          { name: '婚庆策划', desc: '婚礼策划' }
+        ]
+      },
+      {
+        name: '家政',
+        qualification: '',
+        scope: '适用于提供家政服务，如保姆、月嫂、房屋保洁、家电维修、数码电器维修等在线预约等服务。',
+        templates: [
+          { name: '家政服务', desc: '家庭保洁' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '餐饮',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '餐厅排队',
+        qualification: '',
+        scope: '适用于为餐饮门店提供就餐线上取号、排号等排队服务。',
+        templates: [
+          { name: '餐厅排队', desc: '线上取号' }
+        ]
+      },
+      {
+        name: '外卖点餐',
+        qualification: '（2选1）：1、餐饮门店主体营业执照原件及翻译件（英文或中文）、门店可以从事餐饮服务的证件原件及翻译件（英文或中文）、线下门店照片2、小程序主体证件原件及翻译件（英文或中文）、与至少3家餐饮门店的合作合同及该餐饮门店可以从事餐饮服务的证件原件及翻译件（英文或中文）',
+        scope: '适用于餐饮场所/点餐平台/外卖平台提供的点餐、外卖服务。',
+        templates: [
+          { name: '外卖点餐', desc: '外卖配送' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '旅游',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '签证',
+        qualification: '',
+        scope: '适用于提供出境签证办理等服务。',
+        templates: [
+          { name: '签证代办', desc: '签证服务' }
+        ]
+      },
+      {
+        name: '旅行社',
+        qualification: '',
+        scope: '适用于境外旅行社主体提供境外旅游产品或服务。',
+        templates: [
+          { name: '旅游服务', desc: '旅游套餐' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '工具',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '记账',
+        qualification: '',
+        scope: '适用于提供价格记录、生活开销等模板功能的记账工具。',
+        templates: [
+          { name: '记账工具', desc: '消费记录' }
+        ]
+      },
+      {
+        name: '日历',
+        qualification: '',
+        scope: '适用于提供日历等服务。',
+        templates: [
+          { name: '万年历', desc: '日历查询' }
+        ]
+      },
+      {
+        name: '天气',
+        qualification: '',
+        scope: '适用于提供天气查询等服务。',
+        templates: [
+          { name: '天气预报', desc: '天气查询' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '商业服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '广告/设计',
+        qualification: '',
+        scope: '提供商业广告、产品设计等相关等服务。',
+        templates: [
+          { name: '广告推广', desc: '广告营销' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '体育',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '体育培训',
+        qualification: '',
+        scope: '适用于提供各种体育项目培训/学习的服务等。',
+        templates: [
+          { name: '体育培训', desc: '运动培训' }
+        ]
+      },
+      {
+        name: '在线健身',
+        qualification: '',
+        scope: '适用于提供各类型的健身运动在线学习/在线指导等服务。',
+        templates: [
+          { name: '健身课程', desc: '健身指导' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '汽车',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '养车/修车',
+        qualification: '',
+        scope: '适用于提供汽车维修/汽车美容/汽车养护等服务。',
+        templates: [
+          { name: '汽车维修', desc: '维修保养' },
+          { name: '汽车美容', desc: '洗车美容' }
+        ]
+      }
+    ]
+  },
+  {
+    name: 'IT科技',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '基础电信运营商',
+        qualification: '',
+        scope: '基础电信运营商提供境外使用的电话卡销售、话费充值、流量充值等服务。',
+        templates: [
+          { name: '话费充值', desc: '话费充值' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '公共服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '商务',
+        qualification: '',
+        scope: '港澳特区政府主体提供当地商务局相关政务服务。',
+        templates: [
+          { name: '政务服务', desc: '政务服务' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '本地服务',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '百货/超市/便利店',
+        qualification: '同时提供：1. 门店主体营业执照原件及翻译件（中文或英文）2. 线下门店照片',
+        scope: '适用于超市、百货商店、便利店提供货品展示、线上预定线下自提导购服务、商品在线销售等。',
+        templates: [
+          { name: '便利店', desc: '便利店' },
+          { name: '超市', desc: '超市购物' }
+        ]
+      },
+      {
+        name: '食品',
+        qualification: '同时提供：1. 当地允许销售食品的证件原件及翻译件(英文或中文) 2. 小程序内涉及的食品类别、产品明细列表等材料',
+        scope: '适用于提供食品在线销售配送或预购自提等服务。',
+        templates: [
+          { name: '食品销售', desc: '零食饮料' }
+        ]
+      }
+    ]
+  },
+  {
+    name: '跨境电商',
+    hasData: true,
+    secondLevel: [
+      {
+        name: '电商平台',
+        qualification: '同时提供：1. 境外当地颁发的电商平台资质原件及翻译件(英文或中文) 2. 与境内企业的委托协议（条款内容须明确境内企业为连带责任承担的主体） 3. 消费者保障机制或方案（如：消费者风险告知书）',
+        scope: '适用于提供网上交易场所进行跨境销售商品的平台型小程序。',
+        templates: [
+          { name: '跨境电商', desc: '跨境购物' }
+        ]
+      }
+    ]
+  }
+]
+
+// ==================== 导出所有主体类型的数据 ====================
+export const categoriesByEntity: CategoriesByEntity[] = [
+  {
+    entityType: EntityType.COMPANY,
+    entityName: '企业/政府等非个人主体',
+    categories: companyCategories
+  },
+  {
+    entityType: EntityType.PERSONAL,
+    entityName: '个人主体',
+    categories: personalCategories
+  },
+  {
+    entityType: EntityType.OVERSEAS,
+    entityName: '境外主体',
+    categories: overseasCategories
+  }
+]
+
+// 根据主体类型获取类目的辅助函数
+export function getCategoriesByEntityType(entityType: EntityType): FirstLevelCategory[] {
+  const data = categoriesByEntity.find(item => item.entityType === entityType)
+  return data?.categories || []
+}
+
+// 导出默认数据（非个人主体，保持向后兼容）
+export default companyCategories

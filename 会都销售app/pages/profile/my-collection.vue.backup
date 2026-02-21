@@ -1,0 +1,134 @@
+<template>
+  <view class="my-collection-page">
+    <!-- 顶部导航栏 -->
+    <view class="nav-bar" :style="{ paddingTop: statusBarHeight + 'px' }">
+      <view class="nav-content">
+        <view class="nav-back" @tap="goBack">
+          <text class="back-icon">←</text>
+        </view>
+        <view class="nav-title">我的宝库</view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state">
+      <text class="empty-icon">💎</text>
+      <text class="empty-text">我的宝库</text>
+      <text class="empty-hint">功能开发中，敬请期待</text>
+      <button class="empty-action-btn" @tap="goToIndex">返回首页</button>
+    </view>
+  </view>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
+// 状态栏高度
+const statusBarHeight = ref(0)
+
+// 返回上一页
+const goBack = () => {
+  uni.navigateBack()
+}
+
+// 跳转到首页
+const goToIndex = () => {
+  uni.switchTab({
+    url: '/pages/index/index'
+  })
+}
+
+onMounted(() => {
+  // 获取系统信息
+  const systemInfo = uni.getSystemInfoSync()
+  statusBarHeight.value = systemInfo.statusBarHeight || 0
+})
+</script>
+
+<style scoped lang="scss">
+.my-collection-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+// 顶部导航栏
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  z-index: 1000;
+
+  .nav-content {
+    display: flex;
+    align-items: center;
+    height: 88rpx;
+    padding: 0 20rpx;
+
+    .nav-back {
+      width: 60rpx;
+      height: 60rpx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .back-icon {
+        font-size: 40rpx;
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+
+    .nav-title {
+      flex: 1;
+      text-align: center;
+      font-size: 36rpx;
+      font-weight: 600;
+      color: #fff;
+      margin-right: 60rpx;
+    }
+  }
+}
+
+// 空状态
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 400rpx;
+
+  .empty-icon {
+    font-size: 120rpx;
+    margin-bottom: 20rpx;
+    opacity: 0.5;
+  }
+
+  .empty-text {
+    font-size: 32rpx;
+    color: #666;
+    margin-bottom: 10rpx;
+    font-weight: 500;
+  }
+
+  .empty-hint {
+    font-size: 24rpx;
+    color: #999;
+    margin-bottom: 40rpx;
+  }
+
+  .empty-action-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border: none;
+    border-radius: 48rpx;
+    padding: 20rpx 48rpx;
+    font-size: 28rpx;
+
+    &::after {
+      border: none;
+    }
+  }
+}
+</style>
