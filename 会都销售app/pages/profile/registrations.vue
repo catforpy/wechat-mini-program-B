@@ -279,9 +279,9 @@ const goToFavoriteCompanies = () => {
 
 // 跳转到直通对话页面
 const goToDirectChat = () => {
-  // 跳转到消息页面
-  uni.switchTab({
-    url: '/pages/message/index'
+  // 跳转到直通对话主入口页
+  uni.navigateTo({
+    url: '/pages/profile/direct-chat/index'
   })
 }
 

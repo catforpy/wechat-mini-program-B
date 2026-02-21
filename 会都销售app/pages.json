@@ -551,6 +551,102 @@
         "navigationStyle": "custom",
         "pageOrientation": "portrait"
       }
+    },
+    {
+      "path": "pages/profile/direct-chat/index",
+      "style": {
+        "navigationBarTitleText": "直通对话",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/enterprise-list",
+      "style": {
+        "navigationBarTitleText": "企业对话",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/personal-list",
+      "style": {
+        "navigationBarTitleText": "个人对话",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/customer-service-index",
+      "style": {
+        "navigationBarTitleText": "客服咨询",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/customer-recruitment",
+      "style": {
+        "navigationBarTitleText": "应聘咨询",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/customer-business",
+      "style": {
+        "navigationBarTitleText": "业务咨询",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/customer-product",
+      "style": {
+        "navigationBarTitleText": "产品咨询",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/customer-other",
+      "style": {
+        "navigationBarTitleText": "其他咨询",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/chat",
+      "style": {
+        "navigationBarTitleText": "聊天",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/group-info",
+      "style": {
+        "navigationBarTitleText": "群详情",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/group-members",
+      "style": {
+        "navigationBarTitleText": "群成员",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/direct-chat/create-group",
+      "style": {
+        "navigationBarTitleText": "创建群聊",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
     }
   ],
   "globalStyle": {
