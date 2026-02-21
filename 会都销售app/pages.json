@@ -647,6 +647,70 @@
         "navigationStyle": "custom",
         "pageOrientation": "portrait"
       }
+    },
+    {
+      "path": "pages/profile/selling-detail",
+      "style": {
+        "navigationBarTitleText": "销售详情",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/selling-intro-edit",
+      "style": {
+        "navigationBarTitleText": "编辑销售介绍",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/leasing-detail",
+      "style": {
+        "navigationBarTitleText": "租赁详情",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/leasing-intro-edit",
+      "style": {
+        "navigationBarTitleText": "编辑租赁介绍",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/cooperation-detail",
+      "style": {
+        "navigationBarTitleText": "合作详情",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/cooperation-intro-edit",
+      "style": {
+        "navigationBarTitleText": "编辑合作介绍",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/profile/miniprogram-manage",
+      "style": {
+        "navigationBarTitleText": "小程序管理",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
+    },
+    {
+      "path": "pages/miniprogram-detail",
+      "style": {
+        "navigationBarTitleText": "小程序详情",
+        "navigationStyle": "custom",
+        "pageOrientation": "portrait"
+      }
     }
   ],
   "globalStyle": {

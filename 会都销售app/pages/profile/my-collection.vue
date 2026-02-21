@@ -187,10 +187,33 @@ const handleTypeChange = (tab: TypeTab) => {
 // 小程序点击
 const handleProgramClick = (program: MiniProgram) => {
   console.log('点击小程序:', program)
+  console.log('小程序类型:', program.type)
 
-  // 跳转到详情页
+  // 获取小程序的类型（购买/租赁/合作）
+  const programType = program.type || 'purchase'
+
+  // 映射数据ID，根据类型使用不同的假数据
+  let detailId = ''
+  if (programType === 'purchase') {
+    // 销售类：使用 selling-1 或 selling-2
+    detailId = program.name.includes('餐饮') || program.emoji === '🍔' ? 'selling-1' : 'selling-2'
+  } else if (programType === 'rent') {
+    // 租赁类：使用 renting-1
+    detailId = 'renting-1'
+  } else if (programType === 'cooperate') {
+    // 合作类：使用 cooperate-1
+    detailId = 'cooperate-1'
+  }
+
+  console.log('🚀 跳转到详情页:', {
+    type: programType,
+    id: detailId,
+    programName: program.name
+  })
+
+  // 跳转到新的通用详情页
   uni.navigateTo({
-    url: `/pages/template/detail/index?templateId=${program.id}&templateName=${encodeURIComponent(program.name)}&templateIcon=${encodeURIComponent(program.icon || '')}&templatePrice=${program.price}&firstLevel=${encodeURIComponent(program.firstLevel)}&secondLevel=${encodeURIComponent(program.secondLevel)}&type=${getTypeLabel(program.type)}`
+    url: `/pages/miniprogram-detail?type=${programType}&id=${detailId}&name=${encodeURIComponent(program.name)}`
   })
 }
 

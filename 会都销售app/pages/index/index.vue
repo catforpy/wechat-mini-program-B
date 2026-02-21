@@ -386,23 +386,36 @@ const handleBrowseMiniPrograms = () => {
 // 小程序卡片点击
 const handleTemplateCardClick = (program: MiniProgram) => {
   console.log('点击模板卡片:', program)
+  console.log('当前类型标签索引:', currentTypeTab.value)
+  console.log('当前类型标签值:', typeTabs.value[currentTypeTab.value])
 
-  const currentSecondLevelCategory = currentSecondLevelCategories.value[currentSecondLevel.value]
-  const currentFirstLevelCategory = currentCategories.value[currentTopTab.value - 2]
+  // 获取当前类型（购买/租赁/合作）
+  const currentType = typeTabs.value[currentTypeTab.value].value
 
-  const categoryInfo = {
-    firstLevel: currentFirstLevelCategory?.name || '',
-    secondLevel: currentSecondLevelCategory?.name || '',
-    qualification: currentSecondLevelCategory?.qualification || '',
-    scope: currentSecondLevelCategory?.scope || '',
-    restrictions: currentSecondLevelCategory?.restrictions || '',
-    type: typeTabs.value[currentTypeTab.value].label // 新增：类型
+  console.log('🎯 当前类型:', currentType)
+
+  // 映射数据ID，根据类型使用不同的假数据
+  let detailId = ''
+  if (currentType === 'purchase') {
+    // 销售类：使用 selling-1 或 selling-2
+    detailId = program.id === '1' || program.name.includes('餐饮') ? 'selling-1' : 'selling-2'
+  } else if (currentType === 'rent') {
+    // 租赁类：使用 renting-1
+    detailId = 'renting-1'
+  } else if (currentType === 'cooperate') {
+    // 合作类：使用 cooperate-1
+    detailId = 'cooperate-1'
   }
 
-  console.log('类目信息:', categoryInfo)
+  console.log('🚀 跳转到详情页:', {
+    type: currentType,
+    id: detailId,
+    programName: program.name
+  })
 
+  // 跳转到新的通用详情页
   uni.navigateTo({
-    url: `/pages/template/detail/index?templateId=${program.id}&templateName=${encodeURIComponent(program.name)}&templateDesc=${encodeURIComponent(program.desc || '')}&templateIcon=${encodeURIComponent(program.icon || '')}&templatePrice=${program.price}&firstLevel=${encodeURIComponent(categoryInfo.firstLevel)}&secondLevel=${encodeURIComponent(categoryInfo.secondLevel)}&qualification=${encodeURIComponent(categoryInfo.qualification)}&scope=${encodeURIComponent(categoryInfo.scope)}&restrictions=${encodeURIComponent(categoryInfo.restrictions || '')}&type=${encodeURIComponent(categoryInfo.type)}`
+    url: `/pages/miniprogram-detail?type=${currentType}&id=${detailId}&name=${encodeURIComponent(program.name)}`
   })
 }
 
